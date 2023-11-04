@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="headerFragment">
+        <div class="container is-fullhd">
+            <header class="header">
+                <nav class="navbar is-transparent">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="/">
+                            <img th:src="@{/image/common/logo.png}" alt="Bulma: a modern CSS framework based on Flexbox" width="84" height="28">
+                        </a>
+                        <div class="navbar-burger" data-target="navbarExampleTransparentExample">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div id="navbarExampleTransparentExample" class="navbar-menu">
+                        <div class="navbar-start">
+                            <a class="navbar-item" href="/">Home</a>
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link" href="#">커뮤니티</a>
+                                <div class="navbar-dropdown is-boxed">
+                                    <a class="navbar-item" href="/board/list.do">공지사항</a>
+                                    <a class="navbar-item" href="#">Modifiers</a>
+                                    <a class="navbar-item" href="#">Columns</a>
+                                    <a class="navbar-item" href="#">Layout</a>
+                                    <a class="navbar-item" href="#">Form</a>
+                                    <hr class="navbar-divider">
+                                    <a class="navbar-item" href="#">Elements</a>
+                                    <a class="navbar-item is-active" href="#">Components</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="navbar-end">
+                            <div th:if="${auth eq 'anonymousUser'}" class="navbar-item">
+                                <div class="field is-grouped">
+                                    <p class="control">
+                                        <a class="button" href="/user/login.do">
+                                            <span class="icon"><i class="fas fa-user-circle"></i></span>
+                                            <span>로그인</span>
+                                        </a>
+                                    </p>
+                                    <p class="control">
+                                        <a class="button is-success" href="#">
+                                            <span class="icon"><i class="fas fa-user-plus"></i></span>
+                                            <span>회원가입</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div  th:if="${auth ne 'anonymousUser'}"  class="navbar-item">
+                                <div class="field is-grouped">
+                                    <p class="control">
+                                        <a class="button" href="#">
+                                            <span class="icon"><i class="fas fa-user-circle"></i></span>
+                                            <span>로그아웃</span>
+                                        </a>
+                                    </p>
+                                    <p class="control">
+                                        <a class="button is-success" href="#">
+                                            <span class="icon"><i class="fas fa-user-plus"></i></span>
+                                            <span>마이페이지</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        </div>
+    </th:block>
+</html>
