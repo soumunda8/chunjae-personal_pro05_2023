@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunjae.project05.persistence.BoardMapper">
+
+    <resultMap id="BoardMgn" type="com.chunjae.project05.entity.BoardMgn">
+        <result property="bmNo" column="bm_no" />
+        <result property="boardName" column="board_name" />
+        <result property="aboutAuth" column="about_auth" />
+        <result property="commentUse" column="comment_use" />
+        <result property="fileUse" column="file_use" />
+    </resultMap>
+
+    <resultMap id="Board" type="com.chunjae.project05.entity.Board">
+        <result property="bno" column="bno" />
+        <result property="bmNo" column="bm_no" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="author" column="author" />
+        <result property="resDate" column="res_date" />
+        <result property="visited" column="visited" />
+    </resultMap>
+
+    <resultMap id="BoardVO" type="com.chunjae.project05.entity.BoardVO">
+        <result property="bno" column="bno" />
+        <result property="bmNo" column="bm_no" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="author" column="author" />
+        <result property="resDate" column="res_date" />
+        <result property="visited" column="visited" />
+        <result property="boardName" column="board_name" />
+        <result property="userName" column="user_name" />
+        <result property="aboutAuth" column="about_auth" />
+        <result property="commentUse" column="comment_use" />
+        <result property="fileUse" column="file_use" />
+    </resultMap>
+
+    <select id="listBoardMgnForHeader" resultMap="BoardMgn">
+        SELECT bm_no, board_name FROM board_mgn
+    </select>
+
+    <!-- boardMgn -->
+    <select id="listBoardMgn" resultMap="BoardMgn">
+        SELECT * FROM board_mgn ASC LIMIT #{postStart}, #{postCount}
+    </select>
+
+    <select id="getBoardMgn" resultMap="BoardMgn">
+        SELECT * FROM board_mgn WHERE bm_no = #{bmNo}
+    </select>
+
+    <insert id="boardMgnInsert">
+        INSERT INTO board_mgn VALUES(DEFAULT, #{boardName}, #{aboutAuth}, #{commentUse}, #{fileUse})
+    </insert>
+
+    <update id="boardMgnUpdate">
+        UPDATE board_mgn SET board_name = #{boardName}, about_auth = #{aboutAuth}, comment_use = #{commentUse}, file_use = #{fileUse} WHERE bm_no = #{bmNo}
+    </update>
+
+    <delete id="boardMgnDelete">
+        DELETE FROM board_mgn WHERE bm_no = #{bmNo}
+    </delete>
+
+    <!-- boardVO -->
+    <select id="boardList" resultMap="BoardVO">
+        <![CDATA[
+        select * from boardList
+        ]]>
+        <where>
+            bm_no = #{bmNo}
+            <if test="searchType != null">
+                AND ${searchType} LIKE concat('%', #{searchKeyword}, '%')
+            </if>
+        </where>
+        <![CDATA[
+        order by res_date desc LIMIT #{postStart}, #{postCount}
+        ]]>
+    </select>
+
+    <select id="boardCount" resultType="integer">
+        <![CDATA[
+        select count(*) from boardList
+        ]]>
+        <where>
+            bm_no = #{bmNo}
+            <if test="searchType != null">
+                AND ${searchType} LIKE concat('%', #{searchKeyword}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="boardListForAdmin" resultMap="BoardVO">
+        select * from boardList where bm_no = #{bmNo}
+    </select>
+
+    <select id="boardGet" resultMap="BoardVO">
+        select * from boardList where bno = #{bno}
+    </select>
+
+    <!-- board -->
+    <select id="boardGetLast" resultMap="BoardVO">
+        select * from boardList order by res_date desc limit 1
+    </select>
+
+    <insert id="boardInsert">
+        INSERT INTO board VALUES(DEFAULT, #{bmNo}, #{title}, #{content}, #{author}, DEFAULT, DEFAULT)
+    </insert>
+
+    <update id="boardUpdate">
+        UPDATE board SET title = #{title}, content = #{content} WHERE bno = #{bno}
+    </update>
+
+    <update id="boardVisitedUpdate">
+        UPDATE board SET visited = visited + 1 WHERE bno = #{bno}
+    </update>
+
+    <delete id="boardDelete">
+        DELETE FROM board WHERE bno = #{bno}
+    </delete>
+
+</mapper>

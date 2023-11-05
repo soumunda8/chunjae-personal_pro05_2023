@@ -1,8 +1,10 @@
 package com.chunjae.project05.entity;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserVO {
 
     private int id;
@@ -10,7 +12,8 @@ public class UserVO {
     private String loginId;
     private String userName;
     private String password;
-    private int roleId = 4;
+    private boolean useYn;
+    private int roleId = 99;
     private String roleNm;
 
 }

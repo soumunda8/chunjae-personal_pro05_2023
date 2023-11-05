@@ -1,16 +1,11 @@
 package com.chunjae.project05.domain;
 
-import com.chunjae.project05.biz.UserService;
-import com.chunjae.project05.entity.User;
-import com.chunjae.project05.entity.UserRole;
 import com.chunjae.project05.entity.UserVO;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 @Data
@@ -45,7 +40,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userVO.getUserName();
+        return userVO.getLoginId();
     }
 
     @Override

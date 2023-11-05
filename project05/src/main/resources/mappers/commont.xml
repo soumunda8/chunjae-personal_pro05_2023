@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunjae.project05.persistence.CommentMapper">
+
+    <resultMap id="Comment" type="com.chunjae.project05.entity.Comment">
+        <result property="cno" column="cno" />
+        <result property="author" column="author" />
+        <result property="content" column="content" />
+        <result property="resDate" column="res_date" />
+        <result property="parNo" column="par_no" />
+    </resultMap>
+
+    <resultMap id="CommentVO" type="com.chunjae.project05.entity.CommentVO">
+        <result property="cno" column="cno" />
+        <result property="author" column="author" />
+        <result property="content" column="content" />
+        <result property="resDate" column="res_date" />
+        <result property="parNo" column="par_no" />
+        <result property="userName" column="user_name" />
+    </resultMap>
+
+    <select id="commentList" resultMap="CommentVO">
+        SELECT * FROM commentList WHERE par_no = #{parNo}
+    </select>
+
+    <select id="commentLast" resultMap="CommentVO">
+        SELECT * FROM commentList ORDER BY resDate DESC LIMIT 1
+    </select>
+
+    <select id="commentGet" resultMap="CommentVO">
+        SELECT * FROM commentList WHERE cno = #{cno}
+    </select>
+
+    <insert id="commentInsert">
+        INSERT INTO comment VALUES(DEFAULT, #{author}, #{content}, DEFAULT, #{parNo})
+    </insert>
+
+    <update id="commentUpdate">
+        UPDATE comment SET content = #{content} WHERE cno = #{cno}
+    </update>
+
+    <delete id="commentDelete">
+        DELETE FROM comment WHERE cno = #{cno}
+    </delete>
+
+    <delete id="commentDeleteAll">
+        DELETE FROM comment WHERE par_no = #{parNo}
+    </delete>
+
+</mapper>

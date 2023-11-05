@@ -8,6 +8,17 @@
         <result property="loginId" column="login_id" />
         <result property="userName" column="user_name" />
         <result property="password" column="password" />
+        <result property="email" column="email" />
+        <result property="tel" column="tel" />
+        <result property="addr1" column="addr1" />
+        <result property="addr2" column="addr2" />
+        <result property="postcode" column="postcode" />
+        <result property="regDate" column="reg_date" />
+        <result property="birth" column="birth" />
+        <result property="pt" column="pt" />
+        <result property="visited" column="visited" />
+        <result property="roleId" column="role_id" />
+        <result property="useYn" column="use_yn" />
     </resultMap>
 
     <resultMap id="UserVO" type="com.chunjae.project05.entity.UserVO">
@@ -15,6 +26,8 @@
         <result property="active" column="active" />
         <result property="loginId" column="login_id" />
         <result property="userName" column="user_name" />
+        <result property="password" column="password" />
+        <result property="useYn" column="use_yn" />
         <result property="roleId" column="role_id" />
         <result property="roleNm" column="roleNm" />
     </resultMap>
@@ -29,8 +42,8 @@
         </where>
     </select>
 
-    <select id="findUserByLoginId" resultMap="User">
-        select user_id, active, login_id, user_name, password
+    <select id="getUserByLoginId" resultMap="User">
+        select *
         from user
         <where>
             <if test=" loginId != null and loginId != '' ">
@@ -39,9 +52,9 @@
         </where>
     </select>
 
-    <insert id="setUserInfo" parameterType="com.chunjae.project05.entity.User" useGeneratedKeys="true">
-        insert into user (active, login_id, user_name, password)
-        values (#{param.active}, #{param.loginId}, #{param.userName}, #{param.password})
+    <insert id="userInsert" parameterType="com.chunjae.project05.entity.User" useGeneratedKeys="true">
+        insert into user (active, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth)
+        values (#{param.active}, #{param.loginId}, #{param.userName}, #{param.password}, #{param.email}, #{param.tel}, #{param.addr1}, #{param.addr2}, #{param.postcode}, #{param.birth})
     </insert>
 
 </mapper>

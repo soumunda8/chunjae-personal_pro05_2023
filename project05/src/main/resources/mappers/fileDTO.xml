@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunjae.project05.persistence.FileDTOMapper">
+
+    <resultMap id="FileDTO" type="com.chunjae.project05.entity.FileDTO">
+        <result property="fno" column="fno" />
+        <result property="parNo" column="par_no" />
+        <result property="saveFolder" column="save_folder" />
+        <result property="originName" column="origin_name" />
+        <result property="saveName" column="save_name" />
+        <result property="fileType" column="file_type" />
+        <result property="uploadDate" column="upload_date" />
+        <result property="toUse" column="to_use" />
+    </resultMap>
+
+    <select id="fileListByPar" resultMap="FileDTO">
+        SELECT * FROM files WHERE par_no = #{parNo} and to_use = #{toUse}
+    </select>
+
+    <select id="fileByFno" resultMap="FileDTO">
+        SELECT * FROM files WHERE fno = #{fno}
+    </select>
+
+    <insert id="filesInsert">
+        INSERT INTO files VALUES (DEFAULT, #{parNo}, #{saveFolder}, #{originName}, #{saveName}, #{fileType}, DEFAULT, #{toUse})
+    </insert>
+
+    <delete id="filesDelete">
+        DELETE FROM files WHERE fno = #{fno}
+    </delete>
+
+    <delete id="filesDeleteAll">
+        DELETE FROM files WHERE par_no = #{parNo}
+    </delete>
+
+</mapper>

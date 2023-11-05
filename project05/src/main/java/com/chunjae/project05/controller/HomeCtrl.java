@@ -15,7 +15,6 @@ public class HomeCtrl {
         // 페이지 공통 설정
         model.addAttribute("titleName", "중고 서적");
         model.addAttribute("pageType", "main");
-        model.addAttribute("formType", "no");
 
         return "index";
     }

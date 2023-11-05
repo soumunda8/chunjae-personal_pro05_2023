@@ -3,37 +3,74 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layoutUser">
 <th:block layout:fragment="content">
-    <form th:action="@{/user/registration.do}" autocomplete="off" th:object="${user}" method="post" class="box">
+    <form th:action="@{/user/registration.do}" autocomplete="off" th:object="${user}" method="post" class="box py-5">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="field has-text-centered">
             <a href="/"><img th:src="@{/image/common/logo.png}" style="width:30%" /></a>
         </div>
-        <div class="field">
+        <div class="field mb-5">
             <label th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">아이디</label>
             <div class="control has-icons-left">
                 <input type="text" th:field="*{loginId}" placeholder="아이디를 입력하세요." class="input" required />
-                <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
             </div>
         </div>
-        <div class="field">
+        <div class="field mb-5">
+            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}">비밀번호</label>
+            <div class="control has-icons-left mb-1">
+                <input type="password" th:field="*{password}" placeholder="8자리 ~ 16자리와 대소문자와 특수문자" class="input" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" maxlength="16" minlength="8" required />
+                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+            </div>
+            <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">비밀번호 확인</label>
+            <div class="control has-icons-left">
+                <input type="password" th:field="*{passwordConfirm}" placeholder="비밀번호 확인을 입력하세요." class="input" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" maxlength="16" minlength="8" required />
+                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+            </div>
+        </div>
+        <div class="field mb-5">
             <label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">이름</label>
             <div class="control has-icons-left">
                 <input type="text" th:field="*{userName}" placeholder="이름을 입력하세요." class="input" required />
-                <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
             </div>
         </div>
-        <div class="field">
-            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}">비밀번호</label>
+        <div class="field mb-5">
+            <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}">이메일</label>
             <div class="control has-icons-left">
-                <input type="password" th:field="*{password}" placeholder="비밀번호를 입력하세요." class="input" required />
-                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요." class="input" required />
+                <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
             </div>
         </div>
-        <div class="field">
-            <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">비밀번호 확인</label>
+        <div class="field mb-5">
+            <label th:if="${#fields.hasErrors('tel')}" th:errors="*{email}">전화번호</label>
             <div class="control has-icons-left">
-                <input type="password" th:field="*{passwordConfirm}" placeholder="비밀번호 확인을 입력하세요." class="input" required />
-                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                <input type="text" th:field="*{tel}" placeholder="010-XXXX-XXXX" class="input" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" required />
+                <span class="icon is-small is-left"><i class="fas fa-phone-alt"></i></span>
+            </div>
+        </div>
+        <div class="field mb-5">
+            <label th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}">생년월일</label>
+            <div class="control has-icons-left">
+                <input type="date" th:field="*{birth}" class="input" required />
+                <span class="icon is-small is-left"><i class="fas fa-calendar-alt"></i></span>
+            </div>
+        </div>
+        <div class="field mb-5">
+            <label th:if="${#fields.hasErrors('addr1')}" th:errors="*{addr1}">기본주소</label>
+            <div class="control has-icons-left mb-1">
+                <input type="text" th:field="*{addr1}" class="input" id="address1" required />
+                <span class="icon is-small is-left"><i class="fas fa-map-marker-alt"></i></span>
+            </div>
+            <div class="control has-icons-left mb-1">
+                <input type="text" th:field="*{addr2}" class="input" id="address2" />
+                <span class="icon is-small is-left"><i class="fas fa-map-marker-alt"></i></span>
+            </div>
+            <div class="control has-icons-left mb-1">
+                <input type="text" th:field="*{postcode}" class="input" id="postcode" style="width:70%" required />
+                <span class="icon is-small is-left"><i class="fas fa-map-marker-alt"></i></span>
+                <button type="button" id="post_btn" onclick="findAddr()" class="button is-success" style="width:calc(30% - 5px)">우편번호 검색</button>
+            </div>
+            <div class="control has-icons-left mb-1">
             </div>
         </div>
         <div class="field">
@@ -45,5 +82,6 @@
             </div>
         </div>
     </form>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </th:block>
 </html>

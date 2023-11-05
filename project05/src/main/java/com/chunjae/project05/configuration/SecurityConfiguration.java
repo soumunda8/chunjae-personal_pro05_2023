@@ -1,6 +1,7 @@
 package com.chunjae.project05.configuration;
 
 import com.chunjae.project05.biz.UserService;
+import com.chunjae.project05.domain.UserFailLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-    //인증 처리와 암호화
+    // 인증 처리와 암호화
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -31,10 +32,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 
-    //인증 관리자
+    // 인증 관리자
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider(userService));
+    }
+
+    @Bean
+    public UserFailLogin loginFailHandler(){
+        return new UserFailLogin();
     }
 
     //접근 보안 설정 관리자
@@ -49,7 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.and().csrf().disable().cors().disable()
                 .and().formLogin()
                 .loginPage("/user/login.do")
-                .failureUrl("/user/login.do?error=true")
+                .failureHandler(loginFailHandler())
+                //.failureUrl("/user/login.do?error=true")
                 .defaultSuccessUrl("/")
                 .usernameParameter("loginId")
                 .passwordParameter("password")

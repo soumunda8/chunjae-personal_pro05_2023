@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <section class="hero is-success is-small">
+        <div class="hero-body">
+            <div class="container is-fullhd">
+                <p class="title" th:text="${'T셀파' + titleName}">
+                </p>
+                <p class="subtitle">
+                    여러 가지 정보를 확인하세요.
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="container is-fullhd py-5">
+        <h2 class="has-text-centered is-size-1 has-text-weight-semibold mb-5" th:text="${titleName}"></h2>
+        <div class="columns is-mobile">
+            <div class="column is-4 is-offset-8">
+                <div class="control">
+                    <form th:action="@{/board/list.do}" method="get" class="field has-addons has-addons-right">
+                        <input type="hidden" name="no" th:value="${boardMgn.bmNo }" />
+                        <select name="type" class="select" style="height:unset;">
+                            <option value="title" th:selected="${type eq 'title'}">제목</option>
+                            <option value="user_name" th:selected="${type eq 'user_name'}">이름</option>
+                        </select>
+                        <input type="text" class="input" id="keyword" name="keyword" placeholder="검색어를 입력하세요" th:value="${keyword}">
+                        <button class="button" type="submit">검색</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${boardList ne ''}" class="d-flex flex-column align-items-center justify-content-center">
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">#</th>
+                        <th class="text-center" scope="col">제목</th>
+                        <th class="text-center" scope="col">작성자</th>
+                        <th class="text-center" scope="col">등록일</th>
+                        <th class="text-center" scope="col">조회수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${boardList}">
+                        <td class="text-center" th:text="${boardStat.count}"></td>
+                        <td>
+                            <a th:href="${'/board/get.do?bno=' + board.bno }" th:text="${board.title}"></a>
+                        </td>
+                        <td class="text-center" th:text="${board.userName}"></td>
+                        <td class="text-center" th:text="${board.resDate}"></td>
+                        <td class="text-center" th:text="${board.visited}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--<nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:if="${curPage > page.pageCount && empty keyword && empty type}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + (page.blockStartNum - 1)}" aria-label="Previous"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
+                    <li class="page-item" th:if="${curPage > page.pageCount && not empty keyword && not empty type}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + (page.blockStartNum - 1) + '&type=' + ${type} + '&keyword=' + ${keyword}}" aria-label="Previous"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
+                    <li class="page-item active" th:if="${empty keyword && empty type}" th:each="num : ${#numbers.sequence(page.blockStartNum,page.blockLastNum)}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + num}" th:text="${num}"></a></li>
+                    <li class="page-item" th:if="${not empty keyword && not empty type}" th:each="num : ${#numbers.sequence(page.blockStartNum,page.blockLastNum)}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + num + '&type=' + ${type} + '&keyword=' + ${keyword}}" th:text="${num}"></a></li>
+                    <li class="page-item" th:if="${page.blockLastNum < page.totalPageCount && empty keyword && empty type}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + (page.blockLastNum + 1)}" aria-label="Next"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
+                    <li class="page-item" th:if="${page.blockLastNum < page.totalPageCount && not empty keyword && not empty type}"><a class="page-link" th:href="@{'/board/list.do?no=' + boardMgn.bmNo + '&page=' + (page.blockLastNum + 1) + '&type=' + ${type} + '&keyword=' + ${keyword}}" aria-label="Next"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
+                </ul>
+            </nav>-->
+        </div>
+
+        <div th:if="${boardList eq ''}" class="has-text-centered mt-5" style="min-height:40vh;line-height:40vh;">
+            <h5 class="font-weight-bold">등록된 게시글이 없습니다.</h5>
+        </div>
+
+        <div class="btn-group d-block text-right mt-3" th:if="${addCheck == true}">
+            <a th:href="${'/board/add.do?no=' + boardMgn.bmNo }" class="button is-success">등록하기</a>
+        </div>
+    </section>
+</th:block>
+</html>

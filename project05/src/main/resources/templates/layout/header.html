@@ -19,18 +19,9 @@
                     <div id="navbarExampleTransparentExample" class="navbar-menu">
                         <div class="navbar-start">
                             <a class="navbar-item" href="/">Home</a>
-                            <div class="navbar-item has-dropdown is-hoverable">
+                            <div class="navbar-item has-dropdown is-hoverable board_drop_menu">
                                 <a class="navbar-link" href="#">커뮤니티</a>
-                                <div class="navbar-dropdown is-boxed">
-                                    <a class="navbar-item" href="/notice/list.do">공지사항</a>
-                                    <a class="navbar-item" href="#">Modifiers</a>
-                                    <a class="navbar-item" href="#">Columns</a>
-                                    <a class="navbar-item" href="#">Layout</a>
-                                    <a class="navbar-item" href="#">Form</a>
-                                    <hr class="navbar-divider">
-                                    <a class="navbar-item" href="#">Elements</a>
-                                    <a class="navbar-item is-active" href="#">Components</a>
-                                </div>
+                                <div class="navbar-dropdown is-boxed" id="boardMenuArea"></div>
                             </div>
                         </div>
 
@@ -84,5 +75,22 @@
                 </nav>
             </header>
         </div>
+        <script>
+            $(function (){
+                $.ajax({
+                    url:"/board/getBoardMgnList.do",
+                    type:"get",
+                    contentType:"application/json",
+                    success : function(result) {
+                        if(result == "") {
+                            $(".board_drop_menu").remove();
+                        }
+                        for(let i in result) {
+                            $("#boardMenuArea").append("<a class='navbar-item' href='/board/list.do?no=" + result[i].bmNo + "'>" + result[i].boardName + "</a>");
+                        }
+                    },
+                });
+            });
+        </script>
     </th:block>
 </html>
