@@ -42,20 +42,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/**","/login","/registration").permitAll()
-                .mvcMatchers("/css/**","/js/**","/images/**","/fonts/**").permitAll()
-                .antMatchers("/home").hasAuthority("ADMIN") // ADMIN 권한의 유저만 /home 에 접근가능
+                .antMatchers("/","/**","/user/login.do","/user/registration.do").permitAll()
+                .mvcMatchers("/css/**","/js/**","/images/**","/fonts/**","/clEditor/**").permitAll()
+                .antMatchers("/admin/home.do").hasAuthority("ADMIN") // ADMIN 권한의 유저만 /home 에 접근가능
                 .anyRequest().authenticated()
-                .and().csrf().disable().cors().disable()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/home")
+                //.and().csrf().disable().cors().disable()
+                .and().formLogin()
+                .loginPage("/user/login.do")
+                .failureUrl("/user/login.do?error=true")
+                .defaultSuccessUrl("/")
                 .usernameParameter("loginId")
                 .passwordParameter("password")
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout.do"))
+                .logoutSuccessUrl("/")
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");

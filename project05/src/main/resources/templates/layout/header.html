@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <th:block th:fragment="headerFragment">
         <div class="container is-fullhd">
             <header class="header">
@@ -21,7 +22,7 @@
                             <div class="navbar-item has-dropdown is-hoverable">
                                 <a class="navbar-link" href="#">커뮤니티</a>
                                 <div class="navbar-dropdown is-boxed">
-                                    <a class="navbar-item" href="/board/list.do">공지사항</a>
+                                    <a class="navbar-item" href="/notice/list.do">공지사항</a>
                                     <a class="navbar-item" href="#">Modifiers</a>
                                     <a class="navbar-item" href="#">Columns</a>
                                     <a class="navbar-item" href="#">Layout</a>
@@ -34,7 +35,7 @@
                         </div>
 
                         <div class="navbar-end">
-                            <div th:if="${auth eq 'anonymousUser'}" class="navbar-item">
+                            <div sec:authorize="isAnonymous()" class="navbar-item">
                                 <div class="field is-grouped">
                                     <p class="control">
                                         <a class="button" href="/user/login.do">
@@ -43,25 +44,37 @@
                                         </a>
                                     </p>
                                     <p class="control">
-                                        <a class="button is-success" href="#">
+                                        <a class="button is-success" href="/user/registration.do">
                                             <span class="icon"><i class="fas fa-user-plus"></i></span>
                                             <span>회원가입</span>
                                         </a>
                                     </p>
                                 </div>
                             </div>
-                            <div  th:if="${auth ne 'anonymousUser'}"  class="navbar-item">
+                            <div sec:authorize="isAuthenticated()" class="navbar-item">
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <a class="button" href="#">
+                                        <a class="button" th:href="@{/logout.do}">
                                             <span class="icon"><i class="fas fa-user-circle"></i></span>
                                             <span>로그아웃</span>
                                         </a>
                                     </p>
-                                    <p class="control">
+                                    <p sec:authorize="hasRole('USER') || hasRole('TEACHER') || hasRole('EMP')" class="control">
                                         <a class="button is-success" href="#">
                                             <span class="icon"><i class="fas fa-user-plus"></i></span>
                                             <span>마이페이지</span>
+                                        </a>
+                                    </p>
+                                    <p sec:authorize="hasRole('EMP')" class="control">
+                                        <a class="button" th:href="@{/emp/home.do}">
+                                            <span class="icon"><i class="fas fa-users-cog"></i></span>
+                                            <span>직원 홈페이지</span>
+                                        </a>
+                                    </p>
+                                    <p sec:authorize="hasRole('ADMIN')" class="control">
+                                        <a class="button is-success" th:href="@{/admin/home.do}">
+                                            <span class="icon"><i class="fas fa-users-cog"></i></span>
+                                            <span>관리자 홈페이지</span>
                                         </a>
                                     </p>
                                 </div>

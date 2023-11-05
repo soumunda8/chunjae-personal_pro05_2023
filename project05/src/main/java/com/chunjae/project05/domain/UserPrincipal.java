@@ -1,35 +1,51 @@
 package com.chunjae.project05.domain;
 
+import com.chunjae.project05.biz.UserService;
 import com.chunjae.project05.entity.User;
+import com.chunjae.project05.entity.UserRole;
+import com.chunjae.project05.entity.UserVO;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 @Data
 public class UserPrincipal implements UserDetails {
 
-    private User user;
+    private UserVO userVO;
 
-    public UserPrincipal(User user){
-        this.user = user;
+    public UserPrincipal(UserVO userVO){
+        this.userVO = userVO;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new UserGrant());
+
+        Collection<GrantedAuthority> collectors = new ArrayList<>();
+        collectors.add(new GrantedAuthority() {
+
+            @Override
+            public String getAuthority() {
+                return "ROLE_" + userVO.getRoleNm();
+            }
+
+        });
+
+        return collectors;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userVO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return userVO.getUserName();
     }
 
     @Override
@@ -49,15 +65,15 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getActive() == 1;
+        return userVO.getActive() == 1;
     }
 
     public String getId() {
-        return user.getLoginId();
+        return userVO.getLoginId();
     }
 
     public String getName(){
-        return user.getUserName();
+        return userVO.getUserName();
     }
 
 }

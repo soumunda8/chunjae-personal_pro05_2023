@@ -1,11 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layoutUser">
+<th:block layout:fragment="content">
+    <form th:action="@{/user/registration.do}" autocomplete="off" th:object="${user}" method="post" class="box">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="field has-text-centered">
+            <a href="/"><img th:src="@{/image/common/logo.png}" style="width:30%" /></a>
+        </div>
+        <div class="field">
+            <label th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">아이디</label>
+            <div class="control has-icons-left">
+                <input type="text" th:field="*{loginId}" placeholder="아이디를 입력하세요." class="input" required />
+                <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+            </div>
+        </div>
+        <div class="field">
+            <label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">이름</label>
+            <div class="control has-icons-left">
+                <input type="text" th:field="*{userName}" placeholder="이름을 입력하세요." class="input" required />
+                <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+            </div>
+        </div>
+        <div class="field">
+            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}">비밀번호</label>
+            <div class="control has-icons-left">
+                <input type="password" th:field="*{password}" placeholder="비밀번호를 입력하세요." class="input" required />
+                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+            </div>
+        </div>
+        <div class="field">
+            <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">비밀번호 확인</label>
+            <div class="control has-icons-left">
+                <input type="password" th:field="*{passwordConfirm}" placeholder="비밀번호 확인을 입력하세요." class="input" required />
+                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+            </div>
+        </div>
+        <div class="field">
+            <p th:utext="${successMessage}">토큰 정보가 만료되었습니다. 토큰을 갱신하시기 바랍니다.</p>
+        </div>
+        <div class="field has-text-centered">
+            <div class="control">
+                <button type="submit" class="button is-success">회원가입</button>
+            </div>
+        </div>
+    </form>
+</th:block>
 </html>

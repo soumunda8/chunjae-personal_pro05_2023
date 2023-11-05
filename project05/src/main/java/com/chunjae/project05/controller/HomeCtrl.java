@@ -13,8 +13,6 @@ public class HomeCtrl {
     public String home(Model model){
 
         // 페이지 공통 설정
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("auth", auth.getPrincipal());                    // 로그인 여부
         model.addAttribute("titleName", "중고 서적");
         model.addAttribute("pageType", "main");
         model.addAttribute("formType", "no");

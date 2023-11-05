@@ -10,6 +10,25 @@
         <result property="password" column="password" />
     </resultMap>
 
+    <resultMap id="UserVO" type="com.chunjae.project05.entity.UserVO">
+        <result property="id" column="user_id" />
+        <result property="active" column="active" />
+        <result property="loginId" column="login_id" />
+        <result property="userName" column="user_name" />
+        <result property="roleId" column="role_id" />
+        <result property="roleNm" column="roleNm" />
+    </resultMap>
+
+    <select id="findUserListByLoginId" resultMap="UserVO">
+        select *
+        from userlist
+        <where>
+            <if test=" loginId != null and loginId != '' ">
+                and login_id = #{loginId}
+            </if>
+        </where>
+    </select>
+
     <select id="findUserByLoginId" resultMap="User">
         select user_id, active, login_id, user_name, password
         from user
