@@ -24,7 +24,7 @@
     </select>
 
     <select id="commentLast" resultMap="CommentVO">
-        SELECT * FROM commentList ORDER BY resDate DESC LIMIT 1
+        SELECT * FROM commentList ORDER BY res_date DESC LIMIT 1
     </select>
 
     <select id="commentGet" resultMap="CommentVO">

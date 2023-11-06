@@ -76,10 +76,18 @@
             </header>
         </div>
         <script>
+
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+
             $(function (){
                 $.ajax({
                     url:"/board/getBoardMgnList.do",
-                    type:"get",
+                    type:"post",
                     contentType:"application/json",
                     success : function(result) {
                         if(result == "") {

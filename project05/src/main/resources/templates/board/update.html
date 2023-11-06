@@ -15,20 +15,20 @@
         </div>
     </section>
     <section class="container is-fullhd py-5">
-        <h2 class="has-text-centered is-size-1 has-text-weight-semibold mb-5" th:text="${titleName + ' 등록하기'}"></h2>
+        <h2 class="has-text-centered is-size-1 has-text-weight-semibold mb-5" th:text="${titleName + ' 수정하기'}"></h2>
         <link rel="stylesheet" th:href="@{/clEditor/jquery.cleditor.css}">
-        <form th:action="@{/board/add.do}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="no" th:value="${boardMgn.bmNo }" />
+        <form th:action="@{/board/update.do}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="bno" th:value="${board.bno }" />
             <div class="field">
                 <label for="title" class="label">제목</label>
                 <div class="control">
-                    <input type="text" placeholder="제목을 입력하세요." class="input" id="title" name="title" required />
+                    <input type="text" placeholder="제목을 입력하세요." class="input" id="title" name="title" th:value="${board.title}" required />
                 </div>
             </div>
             <div class="field">
                 <label for="content" class="label">내용</label>
                 <div class="control">
-                    <textarea name="content" id="content" class="textarea" rows="8" cols="100" maxlength="1400" required></textarea>
+                    <textarea name="content" id="content" class="textarea" rows="8" cols="100" maxlength="1400" required th:text="${board.content}"></textarea>
                     <script>
                         $(document).ready(function() {
                             $("#content").cleditor();
@@ -36,24 +36,52 @@
                     </script>
                 </div>
             </div>
-            <div class="field" th:if="${boardMgn.fileUse}">
+            <div class="field" th:if="${board.fileUse}">
                 <label for="formFileMultiple" class="label">파일 업로드(10MB 이하) <span class="pt-0 px-0" onclick="addFile()">(<i class="fas fa-plus px-1"></i>)</span></label>
                 <div class="control file_area">
+                    <p th:each="files : ${fileList}" th:id="${'files' + filesStat.count}"><span th:text="${files.originName}"></span><button type="button" class="button px-2 py-0 ml-2" th:data-num="${filesStat.count}" th:data-fno="${files.fno}" onclick="removeFiles(this)" style="font-size:0.8rem;">삭제</button></p>
                     <input type="file" class="form-control uploadFiles" name="uploadFiles" id="formFileMultiple" multiple>
                 </div>
             </div>
             <div class="field mt-5">
                 <div class="buttons text-right">
-                    <a th:href="${'/board/list.do?no=' + boardMgn.bmNo }" class="button is-success">목록</a>
-                    <button type="submit" class="button">등록하기</button>
+                    <a th:href="${'/board/get.do?bno=' + board.bno }" class="button is-success">목록</a>
+                    <button type="submit" class="button">수정하기</button>
                 </div>
             </div>
         </form>
         <script type="text/javascript" th:src="@{/clEditor/jquery.cleditor.js}"></script>
         <script>
+            $(function() {
+                let token = $("meta[name='_csrf']").attr("content");
+                let header = $("meta[name='_csrf_header']").attr("content");
+
+                $(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(header, token);
+                });
+            });
+
             function addFile() {
                 let num = $(".uploadFiles").length + 1;
                 $(".form-group.file_area").append("<input type='file' class='form-control uploadFiles mt-1' name='uploadFiles' id='uploadFiles" + num + "' multiple>");
+            }
+
+            function removeFiles(files) {
+                let fno = files.getAttribute('data-fno');
+                let cnt = files.getAttribute('data-num');
+                if(!confirm("해당 파일을 삭제하시겠습니까?")) {return false;}
+
+                let params = {"fno" : parseInt(fno)};
+                $.ajax({
+                    url:"/util/fileRemove.do",
+                    type:"post",
+                    data:params,
+                    success : function(result) {
+                        if(result === true) {
+                            $("#files" + cnt).remove();
+                        }
+                    },
+                });
             }
         </script>
     </section>

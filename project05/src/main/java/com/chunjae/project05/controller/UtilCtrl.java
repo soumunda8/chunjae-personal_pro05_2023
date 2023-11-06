@@ -32,7 +32,7 @@ public class UtilCtrl {
         FileDTO files = fileDTOService.fileByFno(no);
 
         ServletContext application = request.getSession().getServletContext();
-        String realPath = application.getRealPath("/resources/upload/");                                                            // 운영 서버
+        String realPath = application.getRealPath("/upload/");                                                            // 운영 서버
 
         String saveFolder = realPath + files.getSaveFolder();
         String originalFile = files.getOriginName();
@@ -76,15 +76,16 @@ public class UtilCtrl {
     }
 
     @RequestMapping(value="fileRemove.do", method= RequestMethod.POST)
-    public ResponseEntity fileRemove(@RequestBody FileDTO fileDTO, HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public ResponseEntity fileRemove(@RequestParam("fno") int fno, HttpServletRequest request) throws Exception {
         boolean result = false;
-        int fno = fileDTO.getFno();
 
         ServletContext application = request.getSession().getServletContext();
-        String realPath = application.getRealPath("/resources/upload/");                                                            // 운영 서버
+        String realPath = application.getRealPath("/upload");                                                           // 운영 서버
 
         FileDTO files = fileDTOService.fileByFno(fno);
-        File file = new File( realPath + File.separator + files.getSaveFolder() + File.separator + files.getSaveName());
+        File file = new File(realPath + File.separator + files.getSaveFolder() + File.separator + files.getSaveName());
+
         if (file.exists()) { // 해당 파일이 존재하면
             file.delete(); // 파일 삭제
             fileDTOService.filesDelete(fno);

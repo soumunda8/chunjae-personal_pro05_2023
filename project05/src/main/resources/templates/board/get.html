@@ -52,30 +52,41 @@
         <table class="table" th:if="${board.commentUse}">
             <tr th:if="${sid != ''}">
                 <td>
-                    <input type="hidden" name="parNo" id="parNo" value="${board.bno }"/>
+                    <input type="hidden" name="parNo" id="parNo" th:value="${board.bno}"/>
                     <div class="control-group d-inline-block comment_input">
                         <textarea class="form-control" rows="2" name="content" id="content" placeholder="댓글을 입력하세요." required></textarea>
                     </div>
                     <button class="btn btn-primary py-2 px-4" type="button" onclick="commentAdd()">등록하기</button>
                 </td>
             </tr>
+            <!--
             <tr th:if="${commentList ne ''}">
-                <td>
+                <td class="comment_area">
                     <ul id="commentListArea" class="mb-0">
-                        <li th:each="comment : ${commentList}" th:id="${commentStat.count}" class="mb-3">
+                        <li th:each="comment : ${commentList}" th:id="${'comm' + commentStat.count}" class="mb-3">
                             <div class="comment_top">
-                                <p th:text="${commentStat.count + ' ' + comment.userName}">${status.count}. ${comment.nm }<span class="comment_date ml-2" th:text="${#temporals.format(comment.resDate, 'yyyy-MM-dd')}"></span></p>
-                                <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:onclick="commentDelete(${comment.cno + ', ' + commentStat.count })" >삭제</button>
+                                <p th:text="${commentStat.count + ' ' + comment.userName}"></p>
+                                <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:data-cnt="${commentStat.count}" th:data-cno="${comment.cno}" onclick="commentDelete(this)" >삭제</button>
                             </div>
-                            <div class="comment_con">
-                                ${comment.content }
-                            </div>
+                            <div class="comment_con" th:text="${comment.content}"></div>
                         </li>
                     </ul>
                 </td>
             </tr>
-            <tr th:if="${commentList eq ''}">
-                <td class="has-text-centered no_comment">등록된 댓글이 없습니다.</td>
+            -->
+            <tr>
+                <td class="comment_area">
+                    <ul id="commentListArea" class="mb-0">
+                        <li th:each="comment : ${commentList}" th:id="${'comm' + commentStat.count}" class="mb-3" th:if="${commentList ne ''}">
+                            <div class="comment_top">
+                                <p th:text="${commentStat.count + ' ' + comment.userName}"></p>
+                                <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:data-cnt="${commentStat.count}" th:data-cno="${comment.cno}" onclick="commentDelete(this)" >삭제</button>
+                            </div>
+                            <div class="comment_con" th:text="${comment.content}"></div>
+                        </li>
+                        <li class="no_comment" th:if="${commentList eq ''}"><p class="has-text-centered no_comment">등록된 댓글이 없습니다.</p></li>
+                    </ul>
+                </td>
             </tr>
         </table>
         <div>
@@ -84,54 +95,58 @@
             <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/delete.do?bno=' + board.bno}" class="button is-success px-4">삭제</a>
         </div>
         <script>
+            $(function() {
+                let token = $("meta[name='_csrf']").attr("content");
+                let header = $("meta[name='_csrf_header']").attr("content");
+
+                $(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(header, token);
+                });
+            });
+
             function commentAdd() {
                 let parNo = parseInt($("#parNo").val());
                 let content = $("#content").val();
                 let num = $("#commentListArea > li").length + 1;
 
                 let params = {"parNo" : parNo, "content" : content};
+
                 $.ajax({
-                    url:"${path }/board/commentAdd.do",
+                    url:"/board/commentAdd.do",
                     type:"post",
                     data:params,
                     success : function(result) {
                         $("#content").val("");
+
                         let htmlStr = "<li id='comm" + num + "' class='mb-3'>";
                         htmlStr += "<div class='comment_top'>";
-                        htmlStr += "<p class='comment_writer mb-0'>" + num + ". " + result.nm + "<span class='comment_date ml-2'>" + result.resDate + "</span></p>";
-                        htmlStr += "<button class='btn p-0 mr-1 deleteBtn' onclick='commentDelete(" + result.cno + ")'>삭제</button>";
-                        /*htmlStr += "<button class='btn p-0 modifyBtn' onclick='commentModify(" + result.cno + ")'>수정</button>";*/
+                        htmlStr += "<p>" + num + " " + result.userName + "</p>";
+                        htmlStr += "<button class='button' data-cnt='" + num + "' data-cno='" + result.cno + "' onclick='commentDelete(this)'>삭제</button>";
                         htmlStr += "</div>";
                         htmlStr += "<div class='comment_con'>";
                         htmlStr += result.content;
                         htmlStr += "</div>";
                         htmlStr += "</li>";
-                        if(num > 1) {
-                            $("#commentListArea").append(htmlStr);
-                        } else {
+                        if($("#commentListArea > li").length == 0 || $("#commentListArea > li.no_comment").length == 1) {
                             $(".no_comment").remove();
-                            let newHtmlStr = "<ul id='commentListArea' class='mb-0'>";
-                            newHtmlStr += htmlStr;
-                            newHtmlStr += "</ul>";
-                            $(".only_comment").append(newHtmlStr);
                         }
+                        $("#commentListArea").append(htmlStr);
                     },
                 });
             }
 
-            function commentDelete(cno, cnt){
-                let params = {"cno" : parseInt(cno)};
-                let num = $("#commentListArea > li").length;
+            function commentDelete(comment){
+                let cnt = parseInt(comment.getAttribute("data-cnt"));
+                let params = {"cno" : parseInt(comment.getAttribute("data-cno"))};
                 $.ajax({
-                    url:"${path }/board/commentRemove.do",
+                    url:"/board/commentRemove.do",
                     type:"post",
                     data:params,
                     success : function(result) {
                         if(result) {
                             $("#comm" + cnt).remove();
-                            if(num == 1) {
-                                $("#commentListArea").remove();
-                                $(".only_comment").append("<div class='text-center pb-3 no_comment'>등록된 댓글이 없습니다.</div>");
+                            if($("#commentListArea > li").length < 1) {
+                                $("#commentListArea").append("<li class='no_comment'><p class='text-center pb-3no_comment'>등록된 댓글이 없습니다.</p></li>");
                             }
                         }
                     },

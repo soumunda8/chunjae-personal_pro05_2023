@@ -45,6 +45,8 @@ CREATE TABLE board_mgn(
 	file_use BOOLEAN DEFAULT FALSE			-- 게시판 파일 사용 유무
 );
 
+INSERT INTO board_mgn VALUES (DEFAULT, '공지사항', 1, FALSE, FALSE);
+
 CREATE TABLE board(
 	bno INT PRIMARY KEY AUTO_INCREMENT,   							-- 게시글 번호 : 자동 발생
 	bm_no INT NOT NULL,   												-- 게시판 타입 

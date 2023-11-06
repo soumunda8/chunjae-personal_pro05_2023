@@ -26,8 +26,6 @@ public class UserCtrl {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        System.out.println(exception);
-
         modelAndView.addObject("exception", exception);
         modelAndView.addObject("titleName", "로그인");
         modelAndView.setViewName("user/login");
