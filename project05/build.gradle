@@ -32,7 +32,6 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'javax.validation:validation-api'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    implementation 'javax.servlet:jstl'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
