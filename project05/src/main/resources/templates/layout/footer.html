@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="footerFragment">
-        <footer class="footer py-5">
+        <!--<footer class="footer py-5">
             <div class="content has-text-centered">
                 <p>
                     <strong>T셀파</strong> by <a href="https://github.com/soumunda8">novah</a>.<br />
@@ -9,6 +9,35 @@
                     The website content is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
                 </p>
             </div>
-        </footer>
+        </footer>-->
+
+        <div class="container-fluid bg-dark text-white-50 footer">
+            <div class="container wow fadeIn" data-wow-delay="0.1s">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#" onclick="return false;">T셀파</a>, All Right Reserved. Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a th:if="${pageType ne 'main'}" href="#">Home</a>
+                                <a href="#">공지사항</a>
+                                <a href="#">QNA</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fas fa-chevron-up" style="color: #ffffff;"></i></a>
+
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/js/waypoints.min.js}"></script>
+        <script th:src="@{/js/easing.min.js}"></script>
+        <script th:src="@{/js/counterup.min.js}"></script>
+        <script th:src="@{/js/common.js}"></script>
+        <script th:if="${pageType eq 'main'}" th:src="@{/js/main.js}"></script>
+        <script th:if="${pageType ne 'main'}" th:src="@{/js/sub.js}"></script>
     </th:block>
 </html>

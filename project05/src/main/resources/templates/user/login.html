@@ -3,39 +3,44 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layoutUser">
 <th:block layout:fragment="content">
-    <form th:action="@{/user/login.do}" method="post" class="box py-5">
+    <form th:action="@{/user/login.do}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div class="field has-text-centered">
+        <div class="form-outline mb-4 text-center">
             <a href="/"><img th:src="@{/image/common/logo.png}" style="width:30%" /></a>
         </div>
-        <div class="field">
-            <label for="loginId" class="label">아이디</label>
-            <div class="control has-icons-left">
-                <input type="text" placeholder="아이디를 입력하세요." class="input" id="loginId" name="loginId" required />
-                <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+
+        <div class="form-outline mb-4">
+            <input type="text" placeholder="아이디를 입력하세요." class="form-control" id="loginId" name="loginId" required />
+            <label class="form-label" for="loginId" style="display:none;">아이디</label>
+        </div>
+
+        <div class="form-outline mb-4">
+            <input type="password" placeholder="*******" class="form-control" id="password" name="password" required />
+            <label class="form-label" for="password" style="display:none;">비밀번호</label>
+        </div>
+
+        <div class="row mb-4 text-center" th:if="${exception eq 'error01'}">
+            <div class="col">
+                <p style="color:red">아이디 또는 비밀번호가 올바르지 않거나 가입이 되지 않았습니다.</p>
             </div>
         </div>
-        <div class="field">
-            <label for="password" class="label">비밀번호</label>
-            <div class="control has-icons-left">
-                <input type="password" placeholder="*******" class="input" id="password" name="password" required />
-                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+
+        <div class="row mb-4 text-center" th:if="${param.authError}">
+            <div class="col">
+                <p style="color:red">토큰 정보가 만료되었습니다. 토큰을 갱신하시기 바랍니다.</p>
             </div>
         </div>
-        <div class="field has-text-centered" th:if="${exception eq 'error01'}">
-            <p style="color:red">아이디 또는 비밀번호가 올바르지 않거나 가입이 되지 않았습니다.</p>
-        </div>
-        <div class="field" th:if="${param.authError}">
-            <p style="color:blue">토큰 정보가 만료되었습니다. 토큰을 갱신하시기 바랍니다.</p>
-        </div>
-        <!--<div class="field">
-            <label for="rememberId" class="checkbox"><input type="checkbox" id="rememberId">아이디 기억하기</label>
-        </div>-->
-        <div class="field has-text-centered">
-            <div class="control">
-                <button type="submit" class="button is-success">로그인</button>
+
+        <!-- 2 column grid layout for inline styling -->
+        <div class="row mb-4">
+            <div class="col">
+                <!-- Simple link -->
+                <a href="#!" onclick="return false;">비밀번호 찾기</a>
             </div>
         </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">로그인</button>
     </form>
 </th:block>
 </html>

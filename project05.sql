@@ -86,21 +86,23 @@ CREATE TABLE product(
 	pro_price INT NOT NULL,									-- 상품 가격
 	content VARCHAR(5000),									-- 상품 설명
 	login_id VARCHAR(255) NOT NULL,						-- 상품 등록자
-	pro_active VARCHAR(20) NOT NULL,						-- 상품 거래 상태 (거래 완료, 미완료)
+	pro_active VARCHAR(30) NOT NULL,						-- 상품 거래 상태 (거래 완료, 미완료)
 	reg_date DATETIME DEFAULT CURRENT_TIMESTAMP,		-- 상품 등록일
 	location VARCHAR(350) NOT NULL,						-- 상품 판매 지역
-	pro_type VARCHAR(20) NOT NULL,						-- 상품 카테고리 (국어, 영어 등)
-	pro_state VARCHAR(20) NOT NULL						-- 상품 상태 (최상, 상, 중)
+	pro_type VARCHAR(30) NOT NULL,						-- 상품 카테고리 (국어, 영어 등)
+	pro_state VARCHAR(30) NOT NULL						-- 상품 상태 (최상, 상, 중)
 );
 
 CREATE TABLE category (
-    category_no VARCHAR(20) PRIMARY KEY, 		-- 카테고리 아이디
-    category_name VARCHAR(50) NOT NULL			-- 카테고리명
+    category_no VARCHAR(30) PRIMARY KEY, 		-- 카테고리 아이디
+    category_name VARCHAR(50) NOT NULL,		-- 카테고리명
+    depth_num INT DEFAULT 2,						-- 카테고리 차수
+    priority_num INT DEFAULT 99					-- 우선순위
 );
 
 CREATE TABLE product_likes(
 	login_id VARCHAR(255) NOT NULL,      					-- 사용자 ID
-   pro_no INT NOT NULL,           							-- 상품 no
+   pro_no INT NOT NULL,           							-- 상품 번호
    res_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 		-- 좋아요를 누른 시간
    PRIMARY KEY (login_id, pro_no)
 );

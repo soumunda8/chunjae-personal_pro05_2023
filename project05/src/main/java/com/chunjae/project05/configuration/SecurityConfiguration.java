@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/","/**","/user/login.do","/user/registration.do").permitAll()
-                .mvcMatchers("/css/**","/js/**","/images/**","/fonts/**","/clEditor/**","/upload/**").permitAll()
+                .mvcMatchers("/css/**","/js/**","/image/**","/fonts/**","/clEditor/**","/upload/**").permitAll()
                 .antMatchers("/admin/home.do").hasAuthority("ADMIN") // ADMIN 권한의 유저만 /home 에 접근가능
                 .anyRequest().authenticated()
                 //.and().csrf().disable().cors().disable()

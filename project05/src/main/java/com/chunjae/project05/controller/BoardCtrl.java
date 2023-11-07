@@ -109,7 +109,6 @@ public class BoardCtrl {
 
         // 페이지 공통 설정
         modelAndView.addObject("titleName", boardMgn.getBoardName());
-        modelAndView.addObject("pageType", "sub");
 
         modelAndView.setViewName("board/list");
         return modelAndView;

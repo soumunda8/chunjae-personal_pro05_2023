@@ -2,79 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <th:block th:fragment="headerFragment">
-        <div class="container is-fullhd">
-            <header class="header">
-                <nav class="navbar is-transparent">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="/">
-                            <img th:src="@{/image/common/logo.png}" alt="Bulma: a modern CSS framework based on Flexbox" width="84" height="28">
-                        </a>
-                        <div class="navbar-burger" data-target="navbarExampleTransparentExample">
-                            <span></span>
-                            <span></span>
-                            <span></span>
+        <!-- Spinner Start -->
+        <div id="spinner"
+             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Navbar Start -->
+        <div class="container-fluid sticky-top">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                    <a href="index.html" class="navbar-brand">
+                        <!--<h1 class="text-white">AI<span class="text-dark">.</span>Tech</h1>-->
+                        <h1><img th:src="@{/image/common/logo.png}" width="84" height="28"></h1>
+                    </a>
+                    <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav ms-auto">
+                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <div class="nav-item dropdown board_drop_menu">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">커뮤니티</a>
+                                <div class="dropdown-menu bg-light mt-2" id="boardMenuArea"></div>
+                            </div>
+                            <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                     </div>
-
-                    <div id="navbarExampleTransparentExample" class="navbar-menu">
-                        <div class="navbar-start">
-                            <a class="navbar-item" href="/">Home</a>
-                            <div class="navbar-item has-dropdown is-hoverable board_drop_menu">
-                                <a class="navbar-link" href="#">커뮤니티</a>
-                                <div class="navbar-dropdown is-boxed" id="boardMenuArea"></div>
-                            </div>
+                    <div class="navbar-end">
+                        <div sec:authorize="isAnonymous()" class="navbar-item">
+                            <a class="btn btn-light" href="/user/login.do">
+                                <span class="icon"><i class="fas fa-user-circle"></i></span>
+                                <span>로그인</span>
+                            </a>
+                            <a class="btn btn-outline-light" href="/user/registration.do">
+                                <span class="icon"><i class="fas fa-user-plus"></i></span>
+                                <span>회원가입</span>
+                            </a>
                         </div>
-
-                        <div class="navbar-end">
-                            <div sec:authorize="isAnonymous()" class="navbar-item">
-                                <div class="field is-grouped">
-                                    <p class="control">
-                                        <a class="button" href="/user/login.do">
-                                            <span class="icon"><i class="fas fa-user-circle"></i></span>
-                                            <span>로그인</span>
-                                        </a>
-                                    </p>
-                                    <p class="control">
-                                        <a class="button is-success" href="/user/registration.do">
-                                            <span class="icon"><i class="fas fa-user-plus"></i></span>
-                                            <span>회원가입</span>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div sec:authorize="isAuthenticated()" class="navbar-item">
-                                <div class="field is-grouped">
-                                    <p class="control">
-                                        <a class="button" th:href="@{/logout.do}">
-                                            <span class="icon"><i class="fas fa-user-circle"></i></span>
-                                            <span>로그아웃</span>
-                                        </a>
-                                    </p>
-                                    <p sec:authorize="hasRole('USER') || hasRole('TEACHER') || hasRole('EMP')" class="control">
-                                        <a class="button is-success" href="#">
-                                            <span class="icon"><i class="fas fa-user-plus"></i></span>
-                                            <span>마이페이지</span>
-                                        </a>
-                                    </p>
-                                    <p sec:authorize="hasRole('EMP')" class="control">
-                                        <a class="button" th:href="@{/emp/home.do}">
-                                            <span class="icon"><i class="fas fa-users-cog"></i></span>
-                                            <span>직원 홈페이지</span>
-                                        </a>
-                                    </p>
-                                    <p sec:authorize="hasRole('ADMIN')" class="control">
-                                        <a class="button is-success" th:href="@{/admin/home.do}">
-                                            <span class="icon"><i class="fas fa-users-cog"></i></span>
-                                            <span>관리자 홈페이지</span>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
+                        <div sec:authorize="isAuthenticated()" class="navbar-item">
+                            <a class="btn btn-light" th:href="@{/logout.do}">
+                                <span class="icon"><i class="fas fa-user-circle"></i></span>
+                                <span>로그아웃</span>
+                            </a>
+                            <a sec:authorize="hasRole('USER') || hasRole('TEACHER') || hasRole('EMP')" class="btn btn-outline-light" href="#">
+                                <span class="icon"><i class="fas fa-user-plus"></i></span>
+                                <span>마이페이지</span>
+                            </a>
+                            <a sec:authorize="hasRole('EMP')" class="btn btn-light" th:href="@{/emp/home.do}">
+                                <span class="icon"><i class="fas fa-users-cog"></i></span>
+                                <span>직원 홈페이지</span>
+                            </a>
+                            <a sec:authorize="hasRole('ADMIN')" class="btn btn-outline-light" th:href="@{/admin/home.do}">
+                                <span class="icon"><i class="fas fa-users-cog"></i></span>
+                                <span>관리자 홈페이지</span>
+                            </a>
                         </div>
                     </div>
                 </nav>
-            </header>
+            </div>
         </div>
+        <!-- Navbar End -->
         <script>
 
             let token = $("meta[name='_csrf']").attr("content");
@@ -94,7 +85,7 @@
                             $(".board_drop_menu").remove();
                         }
                         for(let i in result) {
-                            $("#boardMenuArea").append("<a class='navbar-item' href='/board/list.do?no=" + result[i].bmNo + "'>" + result[i].boardName + "</a>");
+                            $("#boardMenuArea").append("<a class='dropdown-item' href='/board/list.do?no=" + result[i].bmNo + "'>" + result[i].boardName + "</a>");
                         }
                     },
                 });
