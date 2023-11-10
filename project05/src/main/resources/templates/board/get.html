@@ -1,158 +1,160 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
-<th:block layout:fragment="content">
-    <section class="hero is-success is-small">
-        <div class="hero-body">
-            <div class="container is-fullhd">
-                <p class="title" th:text="${'T셀파' + titleName}">
-                </p>
-                <p class="subtitle">
-                    여러 가지 정보를 확인하세요.
-                </p>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/sub.css}">
+        <title th:text="${'T셀파::' + titleName}"></title>
+    </head>
+    <body>
+
+        <th:block th:insert="~{layout/header :: header}"></th:block>
+
+        <div class="container-fluid pt-5 bg-primary hero-header mb-5">
+            <div class="container py-5">
+                <div class="align-self-center text-center ">
+                    <h1 class="text-white mb-4" th:text="${'T셀파' + titleName}"></h1>
+                    <p class="text-white">여러 가지 정보를 확인하세요.</p>
+                </div>
             </div>
         </div>
-    </section>
-    <section class="container is-fullhd py-5">
-        <h2 class="has-text-centered is-size-1 has-text-weight-semibold mb-5" th:text="${titleName + ' 상세보기'}"></h2>
-        <table class="table">
-            <tr>
-                <th>제목</th>
-                <td th:text="${board.title}"></td>
-                <th>조회수</th>
-                <td th:text="${board.visited}"></td>
-            </tr>
-            <tr>
-                <th>작성일</th>
-                <td th:text="${board.resDate}"></td>
-                <th>작성자</th>
-                <td th:text="${board.userName}"></td>
-            </tr>
-            <tr>
-                <th>내용</th>
-                <td colspan="3" th:text="${board.content}"></td>
-            </tr>
-            <tr th:if="${fileList ne ''}">
-                <th>첨부파일</th>
-                <td colspan="3">
-                    <ul class="mb-0">
-                        <li th:each="files : ${fileList}">
-                            <a th:href="${'/util/fileDownload.do?no=' + files.fno}">
-                                <i th:if="${files.fileType eq 'image'}" class="fas fa-image pr-1"></i>
-                                <i th:if="${files.fileType ne 'image'}" class="fas fa-file-alt pr-1"></i>
-                                <span th:text="${files.originName}"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
 
-        <table class="table" th:if="${board.commentUse}">
-            <tr th:if="${sid != ''}">
-                <td>
-                    <input type="hidden" name="parNo" id="parNo" th:value="${board.bno}"/>
-                    <div class="control-group d-inline-block comment_input">
-                        <textarea class="form-control" rows="2" name="content" id="content" placeholder="댓글을 입력하세요." required></textarea>
-                    </div>
-                    <button class="btn btn-primary py-2 px-4" type="button" onclick="commentAdd()">등록하기</button>
-                </td>
-            </tr>
-            <!--
-            <tr th:if="${commentList ne ''}">
-                <td class="comment_area">
-                    <ul id="commentListArea" class="mb-0">
-                        <li th:each="comment : ${commentList}" th:id="${'comm' + commentStat.count}" class="mb-3">
-                            <div class="comment_top">
-                                <p th:text="${commentStat.count + ' ' + comment.userName}"></p>
-                                <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:data-cnt="${commentStat.count}" th:data-cno="${comment.cno}" onclick="commentDelete(this)" >삭제</button>
-                            </div>
-                            <div class="comment_con" th:text="${comment.content}"></div>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            -->
-            <tr>
-                <td class="comment_area">
-                    <ul id="commentListArea" class="mb-0">
-                        <li th:each="comment : ${commentList}" th:id="${'comm' + commentStat.count}" class="mb-3" th:if="${commentList ne ''}">
-                            <div class="comment_top">
-                                <p th:text="${commentStat.count + ' ' + comment.userName}"></p>
-                                <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:data-cnt="${commentStat.count}" th:data-cno="${comment.cno}" onclick="commentDelete(this)" >삭제</button>
-                            </div>
-                            <div class="comment_con" th:text="${comment.content}"></div>
-                        </li>
-                        <li class="no_comment" th:if="${commentList eq ''}"><p class="has-text-centered no_comment">등록된 댓글이 없습니다.</p></li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-        <div>
-            <a th:href="${'/board/list.do?no=' + boardMgn.bmNo}" class="button is-success px-4">목록</a>
-            <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/update.do?bno=' + board.bno}" class="button px-4">수정</a>
-            <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/delete.do?bno=' + board.bno}" class="button is-success px-4">삭제</a>
-        </div>
-        <script>
-            $(function() {
-                let token = $("meta[name='_csrf']").attr("content");
-                let header = $("meta[name='_csrf_header']").attr("content");
+        <!-- content -->
+        <section class="container is-fullhd py-5">
+            <h2 class="text-center mb-5" th:text="${titleName + ' 상세보기'}"></h2>
+            <table class="table mb-5">
+                <colgroup>
+                    <col style="width:9.3333333%">
+                    <col style="width:20%">
+                    <col style="width:9.3333333%">
+                    <col style="width:20%">
+                    <col style="width:9.3333333%">
+                    <col style="width:20%">
+                </colgroup>
+                <tr>
+                    <th>제목</th>
+                    <td colspan="5" th:text="${board.title}"></td>
+                </tr>
+                <tr>
+                    <th>작성일</th>
+                    <td th:text="${board.resDate}"></td>
+                    <th>작성자</th>
+                    <td th:text="${board.userName}"></td>
+                    <th>조회수</th>
+                    <td th:text="${board.visited}"></td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td colspan="5" th:text="${board.content}"></td>
+                </tr>
+                <tr th:if="${fileList ne ''}">
+                    <th>첨부파일</th>
+                    <td colspan="3">
+                        <ul class="mb-0">
+                            <li th:each="files : ${fileList}">
+                                <a th:href="${'/util/fileDownload.do?no=' + files.fno}">
+                                    <i th:if="${files.fileType eq 'image'}" class="fas fa-image pr-1"></i>
+                                    <i th:if="${files.fileType ne 'image'}" class="fas fa-file-alt pr-1"></i>
+                                    <span th:text="${files.originName}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
 
-                $(document).ajaxSend(function(e, xhr, options) {
-                    xhr.setRequestHeader(header, token);
+            <table class="table" th:if="${board.commentUse}">
+                <tr th:if="${sid != ''}">
+                    <td>
+                        <input type="hidden" name="parNo" id="parNo" th:value="${board.bno}"/>
+                        <div class="control-group d-inline-block comment_input" style="vertical-align:top;width:calc(100% - 120px);margin-right:1px;">
+                            <textarea class="form-control" rows="2" name="content" id="content" placeholder="댓글을 입력하세요." required></textarea>
+                        </div>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="commentAdd()">등록하기</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="comment_area">
+                        <ul id="commentListArea" class="mb-0">
+                            <li th:each="comment : ${commentList}" th:id="${'comm' + commentStat.count}" class="mb-3" th:if="${commentList ne ''}">
+                                <div class="comment_top">
+                                    <p th:text="${commentStat.count + ' ' + comment.userName}"></p>
+                                    <button th:if="${sid ne '' && (sid eq 'admin' || sid eq comment.author)}" class="button" th:data-cnt="${commentStat.count}" th:data-cno="${comment.cno}" onclick="commentDelete(this)" >삭제</button>
+                                </div>
+                                <div class="comment_con" th:text="${comment.content}"></div>
+                            </li>
+                            <li class="no_comment" th:if="${commentList eq ''}"><p class="has-text-centered no_comment">등록된 댓글이 없습니다.</p></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group d-block text-lg-end mt-3">
+                <a th:href="${'/board/list.do?no=' + boardMgn.bmNo}" class="btn btn-primary px-4">목록</a>
+                <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/update.do?bno=' + board.bno}" class="btn btn-success px-4">수정</a>
+                <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/delete.do?bno=' + board.bno}" class="btn btn-primary px-4">삭제</a>
+            </div>
+            <script>
+                $(function() {
+                    let token = $("meta[name='_csrf']").attr("content");
+                    let header = $("meta[name='_csrf_header']").attr("content");
+
+                    $(document).ajaxSend(function(e, xhr, options) {
+                        xhr.setRequestHeader(header, token);
+                    });
                 });
-            });
 
-            function commentAdd() {
-                let parNo = parseInt($("#parNo").val());
-                let content = $("#content").val();
-                let num = $("#commentListArea > li").length + 1;
+                function commentAdd() {
+                    let parNo = parseInt($("#parNo").val());
+                    let content = $("#content").val();
+                    let num = $("#commentListArea > li").length + 1;
 
-                let params = {"parNo" : parNo, "content" : content};
+                    let params = {"parNo" : parNo, "content" : content};
 
-                $.ajax({
-                    url:"/board/commentAdd.do",
-                    type:"post",
-                    data:params,
-                    success : function(result) {
-                        $("#content").val("");
+                    $.ajax({
+                        url:"/board/commentAdd.do",
+                        type:"post",
+                        data:params,
+                        success : function(result) {
+                            $("#content").val("");
 
-                        let htmlStr = "<li id='comm" + num + "' class='mb-3'>";
-                        htmlStr += "<div class='comment_top'>";
-                        htmlStr += "<p>" + num + " " + result.userName + "</p>";
-                        htmlStr += "<button class='button' data-cnt='" + num + "' data-cno='" + result.cno + "' onclick='commentDelete(this)'>삭제</button>";
-                        htmlStr += "</div>";
-                        htmlStr += "<div class='comment_con'>";
-                        htmlStr += result.content;
-                        htmlStr += "</div>";
-                        htmlStr += "</li>";
-                        if($("#commentListArea > li").length == 0 || $("#commentListArea > li.no_comment").length == 1) {
-                            $(".no_comment").remove();
-                        }
-                        $("#commentListArea").append(htmlStr);
-                    },
-                });
-            }
-
-            function commentDelete(comment){
-                let cnt = parseInt(comment.getAttribute("data-cnt"));
-                let params = {"cno" : parseInt(comment.getAttribute("data-cno"))};
-                $.ajax({
-                    url:"/board/commentRemove.do",
-                    type:"post",
-                    data:params,
-                    success : function(result) {
-                        if(result) {
-                            $("#comm" + cnt).remove();
-                            if($("#commentListArea > li").length < 1) {
-                                $("#commentListArea").append("<li class='no_comment'><p class='text-center pb-3no_comment'>등록된 댓글이 없습니다.</p></li>");
+                            let htmlStr = "<li id='comm" + num + "' class='mb-3'>";
+                            htmlStr += "<div class='comment_top'>";
+                            htmlStr += "<p>" + num + " " + result.userName + "</p>";
+                            htmlStr += "<button class='button' data-cnt='" + num + "' data-cno='" + result.cno + "' onclick='commentDelete(this)'>삭제</button>";
+                            htmlStr += "</div>";
+                            htmlStr += "<div class='comment_con'>";
+                            htmlStr += result.content;
+                            htmlStr += "</div>";
+                            htmlStr += "</li>";
+                            if($("#commentListArea > li").length == 0 || $("#commentListArea > li.no_comment").length == 1) {
+                                $(".no_comment").remove();
                             }
-                        }
-                    },
-                });
-            }
-        </script>
-    </section>
-</th:block>
+                            $("#commentListArea").append(htmlStr);
+                        },
+                    });
+                }
+
+                function commentDelete(comment){
+                    let cnt = parseInt(comment.getAttribute("data-cnt"));
+                    let params = {"cno" : parseInt(comment.getAttribute("data-cno"))};
+                    $.ajax({
+                        url:"/board/commentRemove.do",
+                        type:"post",
+                        data:params,
+                        success : function(result) {
+                            if(result) {
+                                $("#comm" + cnt).remove();
+                                if($("#commentListArea > li").length < 1) {
+                                    $("#commentListArea").append("<li class='no_comment'><p class='text-center pb-3no_comment'>등록된 댓글이 없습니다.</p></li>");
+                                }
+                            }
+                        },
+                    });
+                }
+            </script>
+        </section>
+        <!-- content -->
+
+        <th:block th:insert="~{layout/footer :: footer}"></th:block>
+        <script th:src="@{/js/sub.js}"></script>
+    </body>
 </html>

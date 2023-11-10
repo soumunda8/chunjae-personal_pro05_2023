@@ -8,7 +8,7 @@ import lombok.*;
 public class Comment {
 
     private int cno;
-    private String author;
+    private Long author;
     private String content;
     private String resDate;
     private int parNo;

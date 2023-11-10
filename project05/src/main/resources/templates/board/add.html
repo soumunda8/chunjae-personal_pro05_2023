@@ -1,61 +1,68 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
-<th:block layout:fragment="content">
-    <section class="hero is-success is-small">
-        <div class="hero-body">
-            <div class="container is-fullhd">
-                <p class="title" th:text="${'T셀파' + titleName}">
-                </p>
-                <p class="subtitle">
-                    여러 가지 정보를 확인하세요.
-                </p>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/sub.css}">
+        <link rel="stylesheet" th:href="@{/clEditor/jquery.cleditor.css}">
+        <title th:text="${'T셀파::' + titleName}"></title>
+    </head>
+    <body>
+
+        <th:block th:insert="~{layout/header :: header}"></th:block>
+
+        <div class="container-fluid pt-5 bg-primary hero-header mb-5">
+            <div class="container py-5">
+                <div class="align-self-center text-center ">
+                    <h1 class="text-white mb-4" th:text="${'T셀파' + titleName}"></h1>
+                    <p class="text-white">여러 가지 정보를 확인하세요.</p>
+                </div>
             </div>
         </div>
-    </section>
-    <section class="container is-fullhd py-5">
-        <h2 class="has-text-centered is-size-1 has-text-weight-semibold mb-5" th:text="${titleName + ' 등록하기'}"></h2>
-        <link rel="stylesheet" th:href="@{/clEditor/jquery.cleditor.css}">
-        <form th:action="@{/board/add.do}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="no" th:value="${boardMgn.bmNo }" />
-            <div class="field">
-                <label for="title" class="label">제목</label>
-                <div class="control">
-                    <input type="text" placeholder="제목을 입력하세요." class="input" id="title" name="title" required />
+
+        <!-- content -->
+        <section class="container is-fullhd py-5">
+            <h2 class="text-center mb-5" th:text="${titleName + ' 등록하기'}"></h2>
+            <form th:action="@{/board/add.do}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="no" th:value="${boardMgn.bmNo }" />
+                <div class="form-group row mb-3">
+                    <label for="title" class="col-sm-2 col-form-label">제목</label>
+                    <div class="col-sm-10">
+                        <input type="text" placeholder="제목을 입력하세요." class="form-control" id="title" name="title" required />
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label for="content" class="label">내용</label>
-                <div class="control">
-                    <textarea name="content" id="content" class="textarea" rows="8" cols="100" maxlength="1400" required></textarea>
-                    <script>
-                        $(document).ready(function() {
-                            $("#content").cleditor();
-                        });
-                    </script>
+                <div class="form-group row mb-3">
+                    <label for="content" class="col-sm-2 col-form-label">내용</label>
+                    <div class="col-sm-10">
+                        <textarea name="content" id="content" class="form-control" rows="8" cols="100" maxlength="1400" required></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="field" th:if="${boardMgn.fileUse}">
-                <label for="formFileMultiple" class="label">파일 업로드(10MB 이하) <span class="pt-0 px-0" onclick="addFile()">(<i class="fas fa-plus px-1"></i>)</span></label>
-                <div class="control file_area">
-                    <input type="file" class="form-control uploadFiles" name="uploadFiles" id="formFileMultiple" multiple>
+                <div class="form-group row mb-3" th:if="${boardMgn.fileUse}">
+                    <label class="col-sm-2 col-form-label">파일 업로드<span class="d-inline pt-0 px-0" style="vertical-align: top;" onclick="addFile()">(<i class="fas fa-plus px-1"></i>)</span><br />(10MB 이하)</label>
+                    <div class="col-sm-10 file_area" style="vertical-align:middle;">
+                        <input type="file" class="form-control uploadFiles" name="uploadFiles" id="formFileMultiple" multiple>
+                    </div>
                 </div>
-            </div>
-            <div class="field mt-5">
-                <div class="buttons text-right">
-                    <a th:href="${'/board/list.do?no=' + boardMgn.bmNo }" class="button is-success">목록</a>
-                    <button type="submit" class="button">등록하기</button>
+                <div class="form-group row">
+                    <div class="col-sm-12 text-lg-end text-end">
+                        <a th:href="${'/board/list.do?no=' + boardMgn.bmNo }" class="btn btn-success">목록</a>
+                        <button type="submit" class="btn btn-primary">등록하기</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <script type="text/javascript" th:src="@{/clEditor/jquery.cleditor.js}"></script>
-        <script>
-            function addFile() {
-                let num = $(".uploadFiles").length + 1;
-                $(".form-group.file_area").append("<input type='file' class='form-control uploadFiles mt-1' name='uploadFiles' id='uploadFiles" + num + "' multiple>");
-            }
-        </script>
-    </section>
-</th:block>
+            </form>
+            <script type="text/javascript" th:src="@{/clEditor/jquery.cleditor.js}"></script>
+            <script>
+                $(document).ready(function() {
+                    $("#content").cleditor();
+                });
+                function addFile() {
+                    let num = $(".uploadFiles").length + 1;
+                    $(".file_area").append("<input type='file' class='form-control uploadFiles mt-2' name='uploadFiles' id='uploadFiles" + num + "' multiple>");
+                }
+            </script>
+        </section>
+        <!-- content -->
+
+        <th:block th:insert="~{layout/footer :: footer}"></th:block>
+        <script th:src="@{/js/sub.js}"></script>
+    </body>
 </html>

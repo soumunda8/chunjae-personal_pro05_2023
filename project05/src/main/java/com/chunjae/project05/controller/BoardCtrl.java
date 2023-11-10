@@ -4,6 +4,7 @@ import com.chunjae.project05.biz.BoardService;
 import com.chunjae.project05.biz.CommentService;
 import com.chunjae.project05.biz.FileDTOService;
 import com.chunjae.project05.biz.UserService;
+import com.chunjae.project05.domain.UserPrincipal;
 import com.chunjae.project05.entity.*;
 import com.chunjae.project05.util.BoardPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,8 @@ public class BoardCtrl {
 
         String sid = principal != null ? principal.getName() : "";
 
-        String type = request.getParameter("type");
-        String keyword = request.getParameter("keyword");
+        String type = request.getParameter("type") != null ? request.getParameter("type") : "";
+        String keyword = request.getParameter("keyword") != null ? request.getParameter("keyword") : "";
         int curPage = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
         int bmNo = request.getParameter("no") != null ? Integer.parseInt(request.getParameter("no")) : 1;
 
@@ -74,6 +75,15 @@ public class BoardCtrl {
         List<BoardVO> boardList = boardService.boardList(page);
 
         for(BoardVO boardVO : boardList) {
+
+            String title = "";
+            if(boardVO.getTitle().length() > 41) {
+                title = boardVO.getTitle().substring(0, 40) + "...";
+            } else {
+                title = boardVO.getTitle();
+            }
+            boardVO.setTitle(title);
+
             String authorNm = boardVO.getUserName();
             if(!authorNm.equals("관리자")) {
                 String nm = authorNm.substring(0, 1);
@@ -96,7 +106,6 @@ public class BoardCtrl {
         modelAndView.addObject("type", type);
         modelAndView.addObject("keyword", keyword);
         modelAndView.addObject("page", page);
-        modelAndView.addObject("curPage", curPage);
 
         if (boardList.isEmpty()) {
             modelAndView.addObject("boardList", "");
@@ -141,9 +150,10 @@ public class BoardCtrl {
         ModelAndView modelAndView = new ModelAndView();
 
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
         int bmNo = Integer.parseInt(request.getParameter("no"));
 
-        board.setAuthor(sid);
+        board.setAuthor(user.getId());
         board.setBmNo(bmNo);
         BoardVO boardVO = boardService.boardInsert(board);
 
@@ -278,51 +288,52 @@ public class BoardCtrl {
         String sid = principal != null ? principal.getName() : "";
         int bno = Integer.parseInt(request.getParameter("bno"));
 
-        Cookie[] cookies = request.getCookies();
-        boolean hasCookie = false;
-        if (cookies != null) {
-            String bcookie = "board"+bno;
-            for (Cookie cookie : cookies) {
-                if (bcookie.equals(cookie.getName())) {
-                    hasCookie = true;
-                    break;
+        if(principal != null) {
+            Cookie[] cookies = request.getCookies();
+            boolean hasCookie = false;
+            if (cookies != null) {
+                String bcookie = "board"+bno;
+                for (Cookie cookie : cookies) {
+                    if (bcookie.equals(cookie.getName())) {
+                        hasCookie = true;
+                        break;
+                    }
+                }
+                if(!hasCookie){
+                    Cookie cookie = new Cookie(bcookie, bcookie);
+                    cookie.setMaxAge(3600); // 초 단위, 1시간
+
+                    // 응답 헤더에 쿠키 추가
+                    response.addCookie(cookie);
                 }
             }
-            if(!hasCookie){
-                Cookie cookie = new Cookie(bcookie, bcookie);
-                cookie.setMaxAge(3600); // 초 단위, 1시간
 
-                // 응답 헤더에 쿠키 추가
-                response.addCookie(cookie);
+            BoardVO board = boardService.boardGet(hasCookie, bno, sid);
+            modelAndView.addObject("board", board);
+
+            // 권한 관련 - 수정
+            boolean addCheck = false;
+            if(!sid.equals("") && board.getAuthor().equals(sid)) {
+                addCheck = true;
             }
+            modelAndView.addObject("addCheck", addCheck);
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setParNo(board.getBno());
+            fileDTO.setToUse(toUseFileByBoard);
+
+            List<FileDTO> fileList = fileDTOService.fileListByPar(fileDTO);
+            modelAndView.addObject("fileList", fileList);
+
+            // 페이지 공통 설정
+            modelAndView.addObject("titleName", board.getBoardName());
+
+            modelAndView.setViewName("board/update");
+            return modelAndView;
+        } else {
+            modelAndView.setViewName("redirect:/board/get.do?bno=" + bno);
+            return modelAndView;
         }
-
-        BoardVO board = boardService.boardGet(hasCookie, bno, sid);
-        modelAndView.addObject("board", board);
-
-        // 권한 관련 - 수정
-        boolean addCheck = false;
-        if(!sid.equals("") && board.getAuthor().equals(sid)) {
-            addCheck = true;
-        }
-        modelAndView.addObject("addCheck", addCheck);
-
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setParNo(board.getBno());
-        fileDTO.setToUse(toUseFileByBoard);
-
-        List<FileDTO> fileList = fileDTOService.fileListByPar(fileDTO);
-        modelAndView.addObject("fileList", fileList);
-
-        /*String pathUrl = "/board/list.do?no=" + board.getBmNo();
-        modelAndView.addObject("fileList", fileList);
-        model.addAttribute("pathUrl", pathUrl);*/
-
-        // 페이지 공통 설정
-        modelAndView.addObject("titleName", board.getBoardName());
-
-        modelAndView.setViewName("board/update");
-        return modelAndView;
     }
 
     @PostMapping("/update.do")
@@ -333,66 +344,70 @@ public class BoardCtrl {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        Cookie[] cookies = request.getCookies();
-        boolean hasCookie = false;
-        if (cookies != null) {
-            String bcookie = "board"+bno;
-            for (Cookie cookie : cookies) {
-                if (bcookie.equals(cookie.getName())) {
-                    hasCookie = true;
-                    break;
+        if(principal != null) {
+
+            Cookie[] cookies = request.getCookies();
+            boolean hasCookie = false;
+            if (cookies != null) {
+                String bcookie = "board"+bno;
+                for (Cookie cookie : cookies) {
+                    if (bcookie.equals(cookie.getName())) {
+                        hasCookie = true;
+                        break;
+                    }
+                }
+                if(!hasCookie){
+                    Cookie cookie = new Cookie(bcookie, bcookie);
+                    cookie.setMaxAge(3600); // 초 단위, 1시간
+
+                    // 응답 헤더에 쿠키 추가
+                    response.addCookie(cookie);
                 }
             }
-            if(!hasCookie){
-                Cookie cookie = new Cookie(bcookie, bcookie);
-                cookie.setMaxAge(3600); // 초 단위, 1시간
 
-                // 응답 헤더에 쿠키 추가
-                response.addCookie(cookie);
-            }
-        }
+            BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
+            //BoardMgn boardMgn = boardService.getBoardMgn(boardVO.getBmNo());
 
-        BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
-        //BoardMgn boardMgn = boardService.getBoardMgn(boardVO.getBmNo());
+            Board board = new Board();
+            board.setBno(bno);
+            board.setTitle(title);
+            board.setContent(content);
+            boardService.boardUpdate(board);
 
-        Board board = new Board();
-        board.setBno(bno);
-        board.setTitle(title);
-        board.setContent(content);
-        boardService.boardUpdate(board);
+            if(uploadFiles != null) {
+                ServletContext application = request.getSession().getServletContext();
+                String realPath = application.getRealPath("/upload");                                                             // 운영 서버
 
-        if(uploadFiles != null) {
-            ServletContext application = request.getSession().getServletContext();
-            String realPath = application.getRealPath("/upload");                                                             // 운영 서버
+                SimpleDateFormat sdf = new SimpleDateFormat("yyy/MM/dd");
+                Date date = new Date();
+                String dateFolder = sdf.format(date);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyy/MM/dd");
-            Date date = new Date();
-            String dateFolder = sdf.format(date);
+                File uploadPath = new File(realPath, dateFolder);
+                if(!uploadPath.exists()) {uploadPath.mkdirs();}
 
-            File uploadPath = new File(realPath, dateFolder);
-            if(!uploadPath.exists()) {uploadPath.mkdirs();}
+                for(MultipartFile multipartFile : uploadFiles) {
+                    if(multipartFile.isEmpty()) {continue;}
 
-            for(MultipartFile multipartFile : uploadFiles) {
-                if(multipartFile.isEmpty()) {continue;}
+                    String originalFilename = multipartFile.getOriginalFilename();
+                    UUID uuid = UUID.randomUUID();
+                    String uploadFilename = uuid.toString() + "_" + originalFilename;
 
-                String originalFilename = multipartFile.getOriginalFilename();
-                UUID uuid = UUID.randomUUID();
-                String uploadFilename = uuid.toString() + "_" + originalFilename;
+                    FileDTO fileDTO = new FileDTO();
+                    fileDTO.setParNo(bno);
+                    fileDTO.setSaveFolder(dateFolder);
 
-                FileDTO fileDTO = new FileDTO();
-                fileDTO.setParNo(bno);
-                fileDTO.setSaveFolder(dateFolder);
+                    String fileType = multipartFile.getContentType();
+                    String[] fileTypeArr = fileType.split("/");
+                    fileDTO.setFileType(fileTypeArr[0]);
 
-                String fileType = multipartFile.getContentType();
-                String[] fileTypeArr = fileType.split("/");
-                fileDTO.setFileType(fileTypeArr[0]);
+                    fileDTO.setOriginName(originalFilename);
+                    fileDTO.setSaveName(uploadFilename);
+                    fileDTO.setToUse(toUseFileByBoard);
 
-                fileDTO.setOriginName(originalFilename);
-                fileDTO.setSaveName(uploadFilename);
-                fileDTO.setToUse(toUseFileByBoard);
+                    multipartFile.transferTo(new File(uploadPath, uploadFilename));     // 서버에 파일 업로드 수행
+                    fileDTOService.filesInsert(fileDTO);                                  // DB 등록
+                }
 
-                multipartFile.transferTo(new File(uploadPath, uploadFilename));     // 서버에 파일 업로드 수행
-                fileDTOService.filesInsert(fileDTO);                                  // DB 등록
             }
 
         }
@@ -409,52 +424,57 @@ public class BoardCtrl {
         String sid = principal != null ? principal.getName() : "";
         int bno = Integer.parseInt(request.getParameter("bno"));
 
-        Cookie[] cookies = request.getCookies();
-        boolean hasCookie = false;
-        if (cookies != null) {
-            String bcookie = "board"+bno;
-            for (Cookie cookie : cookies) {
-                if (bcookie.equals(cookie.getName())) {
-                    hasCookie = true;
-                    break;
+        if(principal != null) {
+            Cookie[] cookies = request.getCookies();
+            boolean hasCookie = false;
+            if (cookies != null) {
+                String bcookie = "board"+bno;
+                for (Cookie cookie : cookies) {
+                    if (bcookie.equals(cookie.getName())) {
+                        hasCookie = true;
+                        break;
+                    }
+                }
+                if(!hasCookie){
+                    Cookie cookie = new Cookie(bcookie, bcookie);
+                    cookie.setMaxAge(3600); // 초 단위, 1시간
+
+                    // 응답 헤더에 쿠키 추가
+                    response.addCookie(cookie);
                 }
             }
-            if(!hasCookie){
-                Cookie cookie = new Cookie(bcookie, bcookie);
-                cookie.setMaxAge(3600); // 초 단위, 1시간
 
-                // 응답 헤더에 쿠키 추가
-                response.addCookie(cookie);
-            }
-        }
+            BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
+            int bmNo = boardVO.getBmNo();
 
-        BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
-        int bmNo = boardVO.getBmNo();
+            if(sid.equals(boardVO.getAuthor()) || sid.equals("admin")) {
 
-        if(sid.equals(boardVO.getAuthor()) || sid.equals("admin")) {
-
-            FileDTO fileDTO = new FileDTO();
-            fileDTO.setParNo(bno);
-            fileDTO.setToUse(toUseFileByBoard);
-            List<FileDTO> fileList = fileDTOService.fileListByPar(fileDTO);
-            for(FileDTO files : fileList) {
-                ServletContext application = request.getSession().getServletContext();
-                String realPath = application.getRealPath("/upload");
-                File file = new File( realPath + File.separator + files.getSaveFolder() + File.separator + files.getSaveName());
-                if (file.exists()) {
-                    file.delete();
-                    fileDTOService.filesDeleteAll(bno);
+                FileDTO fileDTO = new FileDTO();
+                fileDTO.setParNo(bno);
+                fileDTO.setToUse(toUseFileByBoard);
+                List<FileDTO> fileList = fileDTOService.fileListByPar(fileDTO);
+                for(FileDTO files : fileList) {
+                    ServletContext application = request.getSession().getServletContext();
+                    String realPath = application.getRealPath("/upload");
+                    File file = new File( realPath + File.separator + files.getSaveFolder() + File.separator + files.getSaveName());
+                    if (file.exists()) {
+                        file.delete();
+                        fileDTOService.filesDeleteAll(bno);
+                    }
                 }
+                commentService.commentDeleteAll(bno);
+                boardService.boardDelete(bno);
+                modelAndView.setViewName("redirect:/board/list.do?no=" + bmNo);
+            } else {
+                rttr.addFlashAttribute("msg", "fail");
+                modelAndView.setViewName("redirect:/board/get.do?bno=" + bno);
             }
-            commentService.commentDeleteAll(bno);
-            boardService.boardDelete(bno);
-            modelAndView.setViewName("redirect:/board/list.do?no=" + bmNo);
+
+            return modelAndView;
         } else {
-            rttr.addFlashAttribute("msg", "fail");
             modelAndView.setViewName("redirect:/board/get.do?bno=" + bno);
+            return modelAndView;
         }
-
-        return modelAndView;
 
     }
 
@@ -462,8 +482,10 @@ public class BoardCtrl {
     @ResponseBody
     public CommentVO commentInsert(@RequestParam("parNo") int parNo, @RequestParam("content") String content, Principal principal) throws Exception {
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
+
         Comment comment = new Comment();
-        comment.setAuthor(sid);
+        comment.setAuthor(user.getId());
         comment.setParNo(parNo);
         comment.setContent(content);
         CommentVO commentVO = commentService.commentInsert(comment);
@@ -484,11 +506,15 @@ public class BoardCtrl {
     public boolean commentDelete(@RequestParam("cno") int cno, Principal principal) throws Exception {
         boolean result = false;
         String sid = principal != null ? principal.getName() : "";
-        CommentVO commentVO = commentService.comment(cno);
-        if(commentVO.getAuthor().equals(sid) || sid.equals("admin")) {
-            commentService.commentDelete(commentVO.getCno());
-            result = true;
+
+        if(sid != "") {
+            CommentVO commentVO = commentService.comment(cno);
+            if(commentVO.getAuthor().equals(sid) || sid.equals("admin")) {
+                commentService.commentDelete(commentVO.getCno());
+                result = true;
+            }
         }
+
         return result;
     }
 

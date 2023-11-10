@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
-    <th:block layout:fragment="content">
-        <!-- Hero Start -->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/main.css}">
+        <title>T셀파</title>
+    </head>
+    <body>
+
+        <th:block th:insert="~{layout/header :: header}"></th:block>
+
         <div class="container-fluid pt-5 bg-primary hero-header mb-5">
             <div class="container pt-5">
                 <div class="row g-5 pt-5">
@@ -264,5 +269,8 @@
             </div>
         </div>
         <!-- Case End -->
-    </th:block>
+
+        <th:block th:insert="~{layout/footer :: footer}"></th:block>
+        <script th:src="@{/js/main.js}"></script>
+    </body>
 </html>

@@ -1,46 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layoutUser">
-<th:block layout:fragment="content">
-    <form th:action="@{/user/login.do}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div class="form-outline mb-4 text-center">
-            <a href="/"><img th:src="@{/image/common/logo.png}" style="width:30%" /></a>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/sub.css}">
+        <title>T셀파::로그인</title>
+    </head>
+    <body>
 
-        <div class="form-outline mb-4">
-            <input type="text" placeholder="아이디를 입력하세요." class="form-control" id="loginId" name="loginId" required />
-            <label class="form-label" for="loginId" style="display:none;">아이디</label>
-        </div>
+        <!-- content -->
 
-        <div class="form-outline mb-4">
-            <input type="password" placeholder="*******" class="form-control" id="password" name="password" required />
-            <label class="form-label" for="password" style="display:none;">비밀번호</label>
-        </div>
+        <section class="vh-100 bg-primary">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                                <form th:action="@{/user/login.do}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <div class="form-outline mb-4 text-center">
+                                        <a href="/"><img th:src="@{/image/common/logo.png}" style="width:30%" /></a>
+                                    </div>
 
-        <div class="row mb-4 text-center" th:if="${exception eq 'error01'}">
-            <div class="col">
-                <p style="color:red">아이디 또는 비밀번호가 올바르지 않거나 가입이 되지 않았습니다.</p>
+                                    <div class="form-outline mb-4">
+                                        <input type="text" placeholder="아이디를 입력하세요." class="form-control" id="loginId" name="loginId" required />
+                                        <label class="form-label" for="loginId" style="display:none;">아이디</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="password" placeholder="*******" class="form-control" id="password" name="password" required />
+                                        <label class="form-label" for="password" style="display:none;">비밀번호</label>
+                                    </div>
+
+                                    <div class="row mb-4 text-center" th:if="${exception eq 'error01'}">
+                                        <div class="col">
+                                            <p style="color:red">아이디 또는 비밀번호가 올바르지 않거나 가입이 되지 않았습니다.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4 text-center" th:if="${param.authError}">
+                                        <div class="col">
+                                            <p style="color:red">토큰 정보가 만료되었습니다. 토큰을 갱신하시기 바랍니다.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2 column grid layout for inline styling -->
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <!-- Simple link -->
+                                            <a href="#!" onclick="return false;">비밀번호 찾기</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">로그인</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="row mb-4 text-center" th:if="${param.authError}">
-            <div class="col">
-                <p style="color:red">토큰 정보가 만료되었습니다. 토큰을 갱신하시기 바랍니다.</p>
-            </div>
-        </div>
+        <!-- content -->
 
-        <!-- 2 column grid layout for inline styling -->
-        <div class="row mb-4">
-            <div class="col">
-                <!-- Simple link -->
-                <a href="#!" onclick="return false;">비밀번호 찾기</a>
-            </div>
-        </div>
-
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">로그인</button>
-    </form>
-</th:block>
+    </body>
 </html>

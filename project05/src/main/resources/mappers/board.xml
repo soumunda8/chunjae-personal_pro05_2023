@@ -67,7 +67,7 @@
         ]]>
         <where>
             bm_no = #{bmNo}
-            <if test="searchType != null">
+            <if test="searchType != null and searchType != ''">
                 AND ${searchType} LIKE concat('%', #{searchKeyword}, '%')
             </if>
         </where>
@@ -82,7 +82,7 @@
         ]]>
         <where>
             bm_no = #{bmNo}
-            <if test="searchType != null">
+            <if test="searchType != null and searchType != ''">
                 AND ${searchType} LIKE concat('%', #{searchKeyword}, '%')
             </if>
         </where>

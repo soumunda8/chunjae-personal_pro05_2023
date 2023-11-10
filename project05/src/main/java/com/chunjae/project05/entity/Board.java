@@ -11,7 +11,7 @@ public class Board {
     private int bmNo;
     private String title;
     private String content;
-    private String author;
+    private Long author;
     private String resDate;
     private int visited;
 
