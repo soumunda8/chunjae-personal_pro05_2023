@@ -507,7 +507,7 @@ public class BoardCtrl {
         boolean result = false;
         String sid = principal != null ? principal.getName() : "";
 
-        if(sid != "") {
+        if(!sid.equals("")) {
             CommentVO commentVO = commentService.comment(cno);
             if(commentVO.getAuthor().equals(sid) || sid.equals("admin")) {
                 commentService.commentDelete(commentVO.getCno());
