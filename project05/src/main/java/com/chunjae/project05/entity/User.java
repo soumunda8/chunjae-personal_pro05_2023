@@ -23,6 +23,5 @@ public class User {
     private int pt;
     private int visited;
     private int roleId = 99;
-    private boolean useYn;
 
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunjae.project05.persistence.ChatMapper">
+
+    <resultMap id="ChatRoom" type="com.chunjae.project05.entity.ChatRoom">
+        <result property="roomId" column="room_id" />
+        <result property="roomName" column="room_name" />
+        <result property="productId" column="product_id" />
+        <result property="buyerId" column="buyer_id" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+
+    <resultMap id="ChatRoomVO" type="com.chunjae.project05.entity.ChatRoomVO">
+        <result property="roomId" column="room_id" />
+        <result property="roomName" column="room_name" />
+        <result property="productId" column="product_id" />
+        <result property="regDate" column="reg_date" />
+        <result property="buyerId" column="buyer_id" />
+        <result property="userName" column="user_name" />
+        <result property="active" column="active" />
+    </resultMap>
+
+    <resultMap id="ChatList" type="com.chunjae.project05.entity.ChatList">
+        <result property="chatId" column="chat_id" />
+        <result property="senderId" column="sender_id" />
+        <result property="sendDate" column="send_date" />
+        <result property="message" column="message" />
+        <result property="readYn" column="read_yn" />
+        <result property="roomId" column="room_id" />
+    </resultMap>
+
+    <resultMap id="ChatListVO" type="com.chunjae.project05.entity.ChatListVO">
+        <result property="chatId" column="chat_id" />
+        <result property="sendDate" column="send_date" />
+        <result property="message" column="message" />
+        <result property="readYn" column="read_yn" />
+        <result property="roomId" column="room_id" />
+        <result property="senderId" column="sender_id" />
+        <result property="userName" column="user_name" />
+    </resultMap>
+
+    <select id="chatRoomAllListByProduct" resultMap="ChatRoomVO">
+        select * from chatRoomView where product_id LIKE #{productId}
+    </select>
+
+    <select id="chatRoomAllListByBuyerId" resultMap="ChatRoomVO">
+        select * from chatRoomView where buyer_id LIKE #{buyerId}
+    </select>
+
+    <select id="chatRoomAllListByRoomId" resultMap="ChatRoomVO">
+        select * from chatRoomView where room_id LIKE #{roomId}
+    </select>
+
+    <insert id="createChatRoom">
+        insert into chat_room values(default, #{roomName}, #{productId}, #{buyerId}, default)
+    </insert>
+
+</mapper>

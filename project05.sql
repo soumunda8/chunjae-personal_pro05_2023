@@ -27,12 +27,11 @@ CREATE TABLE user(
 	birth DATE,
 	pt INT DEFAULT 0,
 	visited INT DEFAULT 0,
-	role_id INT NOT NULL DEFAULT 99,
-	use_yn BOOLEAN DEFAULT TRUE
+	role_id INT NOT NULL DEFAULT 99
 );
 
 CREATE VIEW userList AS(
-	SELECT u.user_id AS user_id, u.active AS ACTIVE, u.login_id AS login_id, u.user_name AS user_name, u.password AS PASSWORD, u.use_yn AS use_yn, u.role_id AS role_id, r.role AS roleNm
+	SELECT u.user_id AS user_id, u.active AS ACTIVE, u.login_id AS login_id, u.user_name AS user_name, u.password AS PASSWORD, u.role_id AS role_id, r.role AS roleNm
 	FROM user u
 	LEFT JOIN role r ON u.role_id = r.role_id
 );
@@ -98,9 +97,52 @@ CREATE TABLE category (
     category_no VARCHAR(30) PRIMARY KEY, 		-- 카테고리 아이디
     category_name VARCHAR(50) NOT NULL,		-- 카테고리명
     depth_num INT DEFAULT 2,						-- 카테고리 차수
+    category_par VARCHAR(25),						-- 카테고리 부모
     priority_num INT DEFAULT 99					-- 우선순위
 );
 
+CREATE TABLE chat_room(
+	room_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+	room_name VARCHAR(255) NOT NULL,
+	product_id INT NOT NULL,
+	buyer_id BIGINT NOT NULL,
+	reg_date DATETIME DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE VIEW chatRoomView AS (SELECT r.room_id AS room_id, r.room_name AS room_name, r.product_id AS product_id, r.reg_date AS reg_date, r.buyer_id AS buyer_id, u.user_name AS user_name, u.active AS active FROM chat_room r LEFT JOIN user u ON r.buyer_id = u.user_id);
+
+CREATE TABLE chat_list(
+	chat_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+	sender_id BIGINT NOT NULL,
+	send_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	message TEXT NOT NULL,
+	read_yn BOOLEAN DEFAULT FALSE,
+	room_id BIGINT NOT null
+);
+
+CREATE VIEW chatListView AS (SELECT r.chat_id AS chat_id, r.send_date AS send_date, r.message AS message, r.read_yn AS read_yn, r.room_id AS room_id, r.sender_id AS sender_id, u.user_name AS user_name FROM chat_list r LEFT JOIN user u ON r.sender_id = u.user_id);
+
+-- 삭제 예정 시작
+insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('kim', '김리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
+insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('shin', '신리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'shin@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
+insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('park', '박리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'park@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
+
+INSERT INTO product VALUES(DEFAULT, '테스트상품', 50000, '테스트 상품 관련 내역입니다.', 2, 'trade01', DEFAULT, '가산동', 'product01', 'state01');
+
+INSERT INTO category VALUES('trade', '거래', 1, '', DEFAULT);
+INSERT INTO category VALUES('trade01', '미완료', 2, 'trade', DEFAULT);
+INSERT INTO category VALUES('trade02', '예약', 2, 'trade', DEFAULT);
+INSERT INTO category VALUES('trade03', '완료', 2, 'trade', DEFAULT);
+INSERT INTO category VALUES('product', '상품', 1, '', DEFAULT);
+INSERT INTO category VALUES('product01', '국어', 2, 'product', DEFAULT);
+INSERT INTO category VALUES('product02', '영어', 2, 'product', DEFAULT);
+INSERT INTO category VALUES('state', '상태', 1, '', DEFAULT);
+INSERT INTO category VALUES('state01', '중', 2, 'state', DEFAULT);
+INSERT INTO category VALUES('state02', '상', 2, 'state', DEFAULT);
+INSERT INTO category VALUES('state03', '최상', 2, 'state', DEFAULT);
+-- 삭제 예정 종료
+
+-- 미진행 시작
 CREATE TABLE product_likes(
 	user_id BIGINT NOT NULL,      							-- 사용자 ID
    pro_no INT NOT NULL,           							-- 상품 번호
@@ -115,3 +157,5 @@ CREATE TABLE trade(
 	res_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	-- 거래 일시
 	finish_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP	-- 완료 일시
 );
+
+-- 미진행 종료

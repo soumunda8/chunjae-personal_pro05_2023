@@ -1,10 +1,6 @@
 package com.chunjae.project05.controller;
 
-import com.chunjae.project05.biz.BoardService;
-import com.chunjae.project05.biz.CommentService;
-import com.chunjae.project05.biz.FileDTOService;
-import com.chunjae.project05.biz.UserService;
-import com.chunjae.project05.domain.UserPrincipal;
+import com.chunjae.project05.biz.*;
 import com.chunjae.project05.entity.*;
 import com.chunjae.project05.util.BoardPage;
 import org.springframework.beans.factory.annotation.Autowired;

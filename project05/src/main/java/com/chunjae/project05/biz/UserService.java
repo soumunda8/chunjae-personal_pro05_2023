@@ -19,9 +19,6 @@ public class UserService implements UserDetailsService {
     private UserMapper userMapper;
 
     @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 

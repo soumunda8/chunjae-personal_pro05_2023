@@ -1,5 +1,6 @@
 package com.chunjae.project05.configuration;
 
+import com.chunjae.project05.biz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +27,21 @@ public class WebConfig implements WebMvcConfigurer {
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
+    }
+
+    @Bean
+    public BoardService boardService() {
+        return new BoardServiceImpl();
+    }
+
+    @Bean
+    public CommentService commentService() {
+        return new CommentServiceImpl();
+    }
+
+    @Bean
+    public FileDTOService fileDTOService() {
+        return new FileDTOServiceImpl();
     }
 
 }
