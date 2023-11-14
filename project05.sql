@@ -45,7 +45,7 @@ CREATE TABLE board_mgn(
 	file_use BOOLEAN DEFAULT FALSE			-- 게시판 파일 사용 유무
 );
 
-INSERT INTO board_mgn VALUES (DEFAULT, '공지사항', 1, FALSE, FALSE);
+INSERT INTO board_mgn VALUES (DEFAULT, '공지사항', 1, FALSE, FALSE, FALSE);
 
 CREATE TABLE board(
 	bno INT PRIMARY KEY AUTO_INCREMENT,   							-- 게시글 번호 : 자동 발생
@@ -57,7 +57,7 @@ CREATE TABLE board(
 	visited INT DEFAULT 0   											-- 조회수
 );
 
-CREATE VIEW boardList AS (SELECT b.bno AS bno, b.bm_no AS bm_no, b.title AS title, b.content AS content, b.res_date AS res_date, b.visited as visited, bm.board_name AS board_name, u.user_name AS user_name, bm.about_auth AS about_auth, bm.comment_use AS comment_use, bm.file_use AS file_use FROM board b, user u, board_mgn bm WHERE b.author = u.user_id AND bm.bm_no = b.bm_no order BY b.bno ASC);
+CREATE VIEW boardList AS (SELECT b.bno AS bno, b.bm_no AS bm_no, b.title AS title, b.content AS content, b.res_date AS res_date, b.visited as visited, bm.board_name AS board_name, b.author AS author, u.user_name AS user_name, bm.about_auth AS about_auth, bm.comment_use AS comment_use, bm.file_use AS file_use FROM board b, user u, board_mgn bm WHERE b.author = u.user_id AND bm.bm_no = b.bm_no order BY b.bno ASC);
 
 CREATE TABLE comment(
    cno INT PRIMARY KEY AUTO_INCREMENT,   							-- 댓글번호: 자동발생
@@ -67,7 +67,7 @@ CREATE TABLE comment(
 	par_no INT NOT NULL   												-- 해당 게시글 번호
 );
 
-CREATE VIEW commentList AS (SELECT c.cno AS cno, c.content AS content, c.res_date AS res_Date, c.par_no AS par_no, u.user_name AS user_name FROM comment c, user u WHERE c.author = u.user_id order BY c.cno ASC);
+CREATE VIEW commentList AS (SELECT c.cno AS cno, c.content AS content, c.res_date AS res_Date, c.par_no AS par_no, c.author AS author, u.user_name AS user_name FROM comment c, user u WHERE c.author = u.user_id order BY c.cno ASC);
 
 CREATE TABLE files(
 	fno INT PRIMARY KEY AUTO_INCREMENT,   								-- 파일번호: 자동발생
@@ -103,13 +103,16 @@ CREATE TABLE category (
 
 CREATE TABLE chat_room(
 	room_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-	room_name VARCHAR(255) NOT NULL,
 	product_id INT NOT NULL,
 	buyer_id BIGINT NOT NULL,
 	reg_date DATETIME DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE VIEW chatRoomView AS (SELECT r.room_id AS room_id, r.room_name AS room_name, r.product_id AS product_id, r.reg_date AS reg_date, r.buyer_id AS buyer_id, u.user_name AS user_name, u.active AS active FROM chat_room r LEFT JOIN user u ON r.buyer_id = u.user_id);
+SELECT * FROM chat_room
+
+CREATE VIEW chatRoomView AS (SELECT r.room_id AS room_id, r.product_id AS product_id, r.reg_date AS reg_date, r.buyer_id AS buyer_id, u.user_name AS user_name, u.active AS ACTIVE FROM chat_room r LEFT JOIN user u ON r.buyer_id = u.user_id);
+
+SELECT * FROM chatRoomView
 
 CREATE TABLE chat_list(
 	chat_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -123,9 +126,10 @@ CREATE TABLE chat_list(
 CREATE VIEW chatListView AS (SELECT r.chat_id AS chat_id, r.send_date AS send_date, r.message AS message, r.read_yn AS read_yn, r.room_id AS room_id, r.sender_id AS sender_id, u.user_name AS user_name FROM chat_list r LEFT JOIN user u ON r.sender_id = u.user_id);
 
 -- 삭제 예정 시작
-insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('kim', '김리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
-insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('shin', '신리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'shin@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
-insert into user (login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES ('park', '박리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'park@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
+insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'admin', '관리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 1);
+insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'kim', '김리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 3);
+insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'shin', '신리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'shin@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
+insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'park', '박리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'park@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
 
 INSERT INTO product VALUES(DEFAULT, '테스트상품', 50000, '테스트 상품 관련 내역입니다.', 2, 'trade01', DEFAULT, '가산동', 'product01', 'state01');
 

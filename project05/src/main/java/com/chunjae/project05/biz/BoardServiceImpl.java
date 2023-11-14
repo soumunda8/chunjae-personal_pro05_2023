@@ -68,9 +68,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardVO boardGet(boolean hasCookie, int bno, String loginId) throws Exception {
+    public BoardVO boardGet(boolean hasCookie, int bno, Long userId) throws Exception {
         BoardVO boardVO = boardMapper.boardGet(bno);
-        if(!loginId.equals(boardVO.getAuthor()) && !loginId.equals("admin")) {
+        if(!userId.equals(boardVO.getAuthor()) && !userId.equals(1L)) {
             if(!hasCookie){
                 boardMapper.boardVisitedUpdate(bno);
                 boardVO.setVisited(boardVO.getVisited() + 1);

@@ -218,7 +218,13 @@ public class BoardCtrl {
             }
         }
 
-        BoardVO board = boardService.boardGet(hasCookie, bno, sid);
+        Long userId = 0L;
+        if(principal != null) {
+            User user = userService.getUserByLoginId(sid);
+            userId = user.getId();
+        }
+
+        BoardVO board = boardService.boardGet(hasCookie, bno, userId);
         String userName = board.getUserName();
 
         if(!userName.equals("관리자")) {
@@ -233,7 +239,7 @@ public class BoardCtrl {
 
         // 권한 관련 - 수정
         boolean addCheck = false;
-        if(!sid.equals("") && board.getAuthor().equals(sid)) {
+        if(principal != null && userId != 0L && board.getAuthor().equals(userId)) {
             addCheck = true;
         }
         modelAndView.addObject("addCheck", addCheck);
@@ -282,6 +288,8 @@ public class BoardCtrl {
     public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response, Principal principal) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
+        Long userId = user.getId();
         int bno = Integer.parseInt(request.getParameter("bno"));
 
         if(principal != null) {
@@ -304,12 +312,12 @@ public class BoardCtrl {
                 }
             }
 
-            BoardVO board = boardService.boardGet(hasCookie, bno, sid);
+            BoardVO board = boardService.boardGet(hasCookie, bno, userId);
             modelAndView.addObject("board", board);
 
             // 권한 관련 - 수정
             boolean addCheck = false;
-            if(!sid.equals("") && board.getAuthor().equals(sid)) {
+            if(board.getAuthor().equals(userId)) {
                 addCheck = true;
             }
             modelAndView.addObject("addCheck", addCheck);
@@ -336,6 +344,8 @@ public class BoardCtrl {
     public ModelAndView boardUpdatePro(HttpServletRequest request, HttpServletResponse response, List<MultipartFile> uploadFiles, Principal principal) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
+        Long userId = user.getId();
         int bno = Integer.parseInt(request.getParameter("bno"));
         String title = request.getParameter("title");
         String content = request.getParameter("content");
@@ -361,7 +371,7 @@ public class BoardCtrl {
                 }
             }
 
-            BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
+            BoardVO boardVO = boardService.boardGet(hasCookie, bno, userId);
             //BoardMgn boardMgn = boardService.getBoardMgn(boardVO.getBmNo());
 
             Board board = new Board();
@@ -418,6 +428,8 @@ public class BoardCtrl {
     public ModelAndView boardDeletePro(HttpServletRequest request, HttpServletResponse response, RedirectAttributes rttr, Principal principal) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
+        Long userId = user.getId();
         int bno = Integer.parseInt(request.getParameter("bno"));
 
         if(principal != null) {
@@ -440,10 +452,10 @@ public class BoardCtrl {
                 }
             }
 
-            BoardVO boardVO = boardService.boardGet(hasCookie, bno, sid);
+            BoardVO boardVO = boardService.boardGet(hasCookie, bno, userId);
             int bmNo = boardVO.getBmNo();
 
-            if(sid.equals(boardVO.getAuthor()) || sid.equals("admin")) {
+            if(userId.equals(boardVO.getAuthor()) || sid.equals("admin")) {
 
                 FileDTO fileDTO = new FileDTO();
                 fileDTO.setParNo(bno);
@@ -479,9 +491,10 @@ public class BoardCtrl {
     public CommentVO commentInsert(@RequestParam("parNo") int parNo, @RequestParam("content") String content, Principal principal) throws Exception {
         String sid = principal != null ? principal.getName() : "";
         User user = userService.getUserByLoginId(sid);
+        Long userId = user.getId();
 
         Comment comment = new Comment();
-        comment.setAuthor(user.getId());
+        comment.setAuthor(userId);
         comment.setParNo(parNo);
         comment.setContent(content);
         CommentVO commentVO = commentService.commentInsert(comment);
@@ -502,10 +515,11 @@ public class BoardCtrl {
     public boolean commentDelete(@RequestParam("cno") int cno, Principal principal) throws Exception {
         boolean result = false;
         String sid = principal != null ? principal.getName() : "";
+        User user = userService.getUserByLoginId(sid);
 
-        if(!sid.equals("")) {
+        if(principal != null) {
             CommentVO commentVO = commentService.comment(cno);
-            if(commentVO.getAuthor().equals(sid) || sid.equals("admin")) {
+            if(commentVO.getAuthor().equals(user.getId()) || sid.equals("admin")) {
                 commentService.commentDelete(commentVO.getCno());
                 result = true;
             }

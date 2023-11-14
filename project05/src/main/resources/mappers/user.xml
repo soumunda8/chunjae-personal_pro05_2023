@@ -35,7 +35,7 @@
         from userlist
         <where>
             <if test=" loginId != null and loginId != '' ">
-                and login_id = #{loginId}
+                login_id = #{loginId}
             </if>
         </where>
     </select>
@@ -45,7 +45,7 @@
         from user
         <where>
             <if test=" loginId != null and loginId != '' ">
-                and login_id = #{loginId}
+                login_id = #{loginId}
             </if>
         </where>
     </select>

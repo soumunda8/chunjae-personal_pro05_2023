@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/sub.css}">
+        <title>T셀파::</title>
+    </head>
+    <body>
+
+        <th:block th:insert="~{layout/header :: header}"></th:block>
+
+        <div class="container-fluid pt-5 bg-primary hero-header mb-5">
+            <div class="container py-5">
+                <div class="align-self-center text-center ">
+                    <h1 class="text-white mb-4">상품</h1>
+                    <p class="text-white">많은 중고 상품들을 확인해 보세요.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- content -->
+        <table class="table">
+            <tbody>
+            <tr th:each="product : ${productList}">
+                <td><a th:href="@{/chat/myProChat.do(productId=${product.getProNo()})}" th:text="${product.getTitle() + '관련 채팅'}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- content -->
+
+        <th:block th:insert="~{layout/footer :: footer}"></th:block>
+        <script th:src="@{/js/sub.js}"></script>
+    </body>
+</html>

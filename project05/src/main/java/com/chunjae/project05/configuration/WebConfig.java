@@ -44,4 +44,9 @@ public class WebConfig implements WebMvcConfigurer {
         return new FileDTOServiceImpl();
     }
 
+    @Bean
+    public ProductService productService() {
+        return new ProductServiceImpl();
+    }
+
 }

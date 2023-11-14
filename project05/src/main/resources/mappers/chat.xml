@@ -4,7 +4,6 @@
 
     <resultMap id="ChatRoom" type="com.chunjae.project05.entity.ChatRoom">
         <result property="roomId" column="room_id" />
-        <result property="roomName" column="room_name" />
         <result property="productId" column="product_id" />
         <result property="buyerId" column="buyer_id" />
         <result property="regDate" column="reg_date" />
@@ -12,7 +11,6 @@
 
     <resultMap id="ChatRoomVO" type="com.chunjae.project05.entity.ChatRoomVO">
         <result property="roomId" column="room_id" />
-        <result property="roomName" column="room_name" />
         <result property="productId" column="product_id" />
         <result property="regDate" column="reg_date" />
         <result property="buyerId" column="buyer_id" />
@@ -39,20 +37,44 @@
         <result property="userName" column="user_name" />
     </resultMap>
 
+    <select id="chatRoomAllList" resultMap="ChatRoomVO">
+        select * from chatRoomView where product_id = #{productId} and buyer_id = #{buyerId}
+    </select>
+
     <select id="chatRoomAllListByProduct" resultMap="ChatRoomVO">
-        select * from chatRoomView where product_id LIKE #{productId}
+        select * from chatRoomView where product_id = #{productId}
     </select>
 
     <select id="chatRoomAllListByBuyerId" resultMap="ChatRoomVO">
-        select * from chatRoomView where buyer_id LIKE #{buyerId}
+        select * from chatRoomView where buyer_id = #{buyerId}
     </select>
 
-    <select id="chatRoomAllListByRoomId" resultMap="ChatRoomVO">
-        select * from chatRoomView where room_id LIKE #{roomId}
+    <select id="getRoom" resultMap="ChatRoomVO">
+        select * from chatRoomView where room_id = #{roomId}
+    </select>
+
+    <select id="getChatRoomLast" resultMap="ChatRoomVO">
+        select * from chatRoomView order by reg_date desc limit 1
     </select>
 
     <insert id="createChatRoom">
-        insert into chat_room values(default, #{roomName}, #{productId}, #{buyerId}, default)
+        insert into chat_room values(default, #{productId}, #{buyerId}, default)
     </insert>
+
+    <select id="getChat" resultMap="ChatListVO">
+        select * from chatListView where room_id = #{roomId}
+    </select>
+
+    <select id="getChatLast" resultMap="ChatListVO">
+        select * from chatListView where room_id = #{roomId} order by send_date desc limit 1
+    </select>
+
+    <insert id="insertChatList">
+        insert into chat_list values(default, #{senderId}, default, #{message}, default, #{roomId})
+    </insert>
+
+    <update id="updateChatRead">
+        update chat_list set read_yn = true where chat_id = #{chatId}
+    </update>
 
 </mapper>

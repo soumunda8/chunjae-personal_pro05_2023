@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chunjae.project05.persistence.ProductMapper">
+
+    <resultMap id="Product" type="com.chunjae.project05.entity.Product">
+        <result property="proNo" column="pro_no" />
+        <result property="title" column="title" />
+        <result property="proPrice" column="pro_price" />
+        <result property="content" column="content" />
+        <result property="userId" column="user_id" />
+        <result property="proActive" column="pro_active" />
+        <result property="regDate" column="reg_date" />
+        <result property="location" column="location" />
+        <result property="proType" column="pro_type" />
+        <result property="proState" column="pro_state" />
+    </resultMap>
+
+    <select id="productList" resultMap="Product">
+        SELECT * FROM product
+    </select>
+
+    <select id="productListByUser" resultMap="Product">
+        SELECT * FROM product where user_id = #{userId}
+    </select>
+
+    <select id="productGet" resultMap="Product">
+        SELECT * FROM product WHERE pro_no = #{proNo}
+    </select>
+
+</mapper>

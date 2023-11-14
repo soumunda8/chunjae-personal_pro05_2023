@@ -20,7 +20,7 @@ public interface BoardService {
     public List<BoardVO> boardList(BoardPage page) throws Exception;
     public int boardCount(BoardPage page) throws Exception;
     public List<BoardVO> boardListForAdmin(int bmNo) throws Exception;
-    public BoardVO boardGet(boolean hasCookie, int bno, String loginId) throws Exception;
+    public BoardVO boardGet(boolean hasCookie, int bno, Long loginId) throws Exception;
     public BoardVO boardInsert(Board board) throws Exception;
     public int boardUpdate(Board board) throws Exception;
     public int qnaUpdate(Board board) throws Exception;

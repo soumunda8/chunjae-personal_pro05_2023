@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class ChatRoom {
 
     private Long roomId;
-    private String roomName;
     private Integer productId;
     private Long buyerId;
     private String regDate;
