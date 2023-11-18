@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <th:block th:insert="~{layout/head :: head}"></th:block>
         <link rel="stylesheet" th:href="@{/css/sub.css}">
@@ -38,10 +39,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form class="form-inline">
-                        <!--<div class="form-group">
-                            <label for="name">대화명</label>
-                            <input type="text" id="userName" class="form-control" placeholder="Your name here...">
-                        </div>-->
+                        <!--<input type="hidden" id="userName" th:value="${userName}">-->
                         <div class="form-group">
                             <label for="message">내용</label>
                             <input type="text" id="message" name="message" class="form-control" placeholder="메시지 내용">
@@ -67,6 +65,7 @@
             var stompClient = null;
             var roomId = [[${roomId}]];
             var chatList = [[${chatList}]];
+            var userName = [[${#authentication.principal.username}]];
 
             function setConnected(connected) {
                 $("#connect").prop("disabled", connected);
@@ -106,8 +105,10 @@
             function sendChat() {
                 stompClient.send("/chat/send/"+roomId, {},
                     JSON.stringify({
+                        'userName': userName,
                         'message' : $("#message").val()
                     }));
+                $("#message").val("");
             }
 
             //저장된 채팅 불러오기
@@ -133,7 +134,7 @@
                     e.preventDefault();
                 });
                 $( "#connect" ).click(function() { connect(); });
-                //$( "#disconnect" ).click(function() { disconnect(); });
+                $( "#disconnect" ).click(function() { disconnect(); });
                 $( "#send" ).click(function() { sendChat(); });
             });
 

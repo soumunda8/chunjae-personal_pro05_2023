@@ -93,14 +93,14 @@
                 <a th:if="${sid ne '' && (sid eq 'admin' || sid eq board.author)}" th:href="${'/board/delete.do?bno=' + board.bno}" class="btn btn-primary px-4">삭제</a>
             </div>
             <script>
-                $(function() {
+                /*$(function() {
                     let token = $("meta[name='_csrf']").attr("content");
                     let header = $("meta[name='_csrf_header']").attr("content");
 
                     $(document).ajaxSend(function(e, xhr, options) {
                         xhr.setRequestHeader(header, token);
                     });
-                });
+                });*/
 
                 function commentAdd() {
                     let parNo = parseInt($("#parNo").val());

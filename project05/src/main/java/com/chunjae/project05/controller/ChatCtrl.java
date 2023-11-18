@@ -77,9 +77,9 @@ public class ChatCtrl {
             ChatRoomVO chatRoomVO = chatService.getRoom(roomId);
             if(product != null || (chatRoomVO != null && chatRoomVO.getBuyerId().equals(user.getId()))) {
                 List<ChatListVO> chatList = chatService.getChat(roomId);
-                if(chatRoomVO.getUserName().equals(user.getUserName()) ) {}
                 model.addAttribute("roomId", roomId);
                 model.addAttribute("chatList", chatList);
+                model.addAttribute("userName", user.getUserName());
                 return "chat/get";
             }
         }
@@ -88,8 +88,8 @@ public class ChatCtrl {
 
     }
 
-    @MessageMapping("/{roomId}") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략
-    @SendTo("/getChat.do/{roomId}")   //구독하고 있는 장소로 메시지 전송 (목적지)  -> WebSocketConfig Broker 에서 적용한건 앞에 붙어줘야됨
+    @MessageMapping("/{roomId}")
+    @SendTo("/chat/getChat.do/{roomId}")
     public ChatListVO chatInsert(@DestinationVariable Long roomId, ChatListVO message, Principal principal) throws Exception {
 
         String sid = principal.getName();

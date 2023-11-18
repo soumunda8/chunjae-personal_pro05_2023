@@ -52,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/css/**","/js/**","/image/**","/fonts/**","/clEditor/**","/upload/**").permitAll()
                 .antMatchers("/admin/home.do").hasAuthority("ADMIN") // ADMIN 권한의 유저만 /home 에 접근가능
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/user/login.do")
@@ -60,16 +61,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .usernameParameter("loginId")
                 .passwordParameter("password")
+
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout.do"))
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/")
+
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
 
-        //http.csrf().disable().cors().disable();
+        http.csrf().disable().cors().disable();
     }
 
 
