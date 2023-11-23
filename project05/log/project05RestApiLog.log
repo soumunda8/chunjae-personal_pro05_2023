@@ -93,3 +93,25 @@ java.io.StreamCorruptedException: invalid type code: 00
 2023-11-19 21:14:56.233 INFO  [SpringApplicationShutdownHook] [o.s.m.s.b.SimpleBrokerMessageHandler] - Stopped.
 2023-11-19 21:14:56.250 INFO  [SpringApplicationShutdownHook] [com.zaxxer.hikari.HikariDataSource] - HikariPool-1 - Shutdown initiated...
 2023-11-19 21:14:56.253 INFO  [SpringApplicationShutdownHook] [com.zaxxer.hikari.HikariDataSource] - HikariPool-1 - Shutdown completed.
+2023-11-23 15:07:56.812 INFO  [restartedMain] [c.chunjae.project05.Project05Application] - Starting Project05Application using Java 17.0.7 on FULL8-015 with PID 17368 (D:\park\project\personal\personal_pro05_2023\project05\build\classes\java\main started by db400tea in D:\park\project\personal\personal_pro05_2023\project05)
+2023-11-23 15:07:56.814 INFO  [restartedMain] [c.chunjae.project05.Project05Application] - No active profile set, falling back to 1 default profile: "default"
+2023-11-23 15:07:56.940 INFO  [restartedMain] [o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-11-23 15:07:56.940 INFO  [restartedMain] [o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-11-23 15:07:57.629 INFO  [restartedMain] [o.s.b.w.embedded.tomcat.TomcatWebServer] - Tomcat initialized with port(s): 8085 (http)
+2023-11-23 15:07:57.634 INFO  [restartedMain] [o.apache.coyote.http11.Http11NioProtocol] - Initializing ProtocolHandler ["http-nio-8085"]
+2023-11-23 15:07:57.635 INFO  [restartedMain] [org.apache.catalina.core.StandardService] - Starting service [Tomcat]
+2023-11-23 15:07:57.635 INFO  [restartedMain] [org.apache.catalina.core.StandardEngine] - Starting Servlet engine: [Apache Tomcat/9.0.82]
+2023-11-23 15:07:57.721 INFO  [restartedMain] [org.apache.jasper.servlet.TldScanner] - At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2023-11-23 15:07:57.725 INFO  [restartedMain] [o.a.c.c.C.[Tomcat].[localhost].[/]] - Initializing Spring embedded WebApplicationContext
+2023-11-23 15:07:57.725 INFO  [restartedMain] [o.s.b.w.s.c.ServletWebServerApplicationContext] - Root WebApplicationContext: initialization completed in 785 ms
+2023-11-23 15:07:58.096 INFO  [restartedMain] [o.s.s.web.DefaultSecurityFilterChain] - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2a325840, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@75d9a0cc, org.springframework.security.web.context.SecurityContextPersistenceFilter@1839ecb, org.springframework.security.web.header.HeaderWriterFilter@6f6d3779, org.springframework.security.web.authentication.logout.LogoutFilter@5c821e00, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6c801721, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2fe4a76c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@760f5333, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@682a00e5, org.springframework.security.web.session.SessionManagementFilter@420a8c62, org.springframework.security.web.access.ExceptionTranslationFilter@34f30518, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4e2f4ddb]
+2023-11-23 15:07:58.302 INFO  [restartedMain] [o.s.b.d.a.OptionalLiveReloadServer] - LiveReload server is running on port 35729
+2023-11-23 15:07:58.311 INFO  [restartedMain] [o.apache.coyote.http11.Http11NioProtocol] - Starting ProtocolHandler ["http-nio-8085"]
+2023-11-23 15:07:58.326 INFO  [restartedMain] [o.s.b.w.embedded.tomcat.TomcatWebServer] - Tomcat started on port(s): 8085 (http) with context path ''
+2023-11-23 15:07:58.327 INFO  [restartedMain] [o.s.m.s.b.SimpleBrokerMessageHandler] - Starting...
+2023-11-23 15:07:58.327 INFO  [restartedMain] [o.s.m.s.b.SimpleBrokerMessageHandler] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7028d0c5]]
+2023-11-23 15:07:58.327 INFO  [restartedMain] [o.s.m.s.b.SimpleBrokerMessageHandler] - Started.
+2023-11-23 15:07:58.333 INFO  [restartedMain] [c.chunjae.project05.Project05Application] - Started Project05Application in 1.711 seconds (JVM running for 2.152)
+2023-11-23 15:08:12.364 INFO  [SpringApplicationShutdownHook] [o.s.m.s.b.SimpleBrokerMessageHandler] - Stopping...
+2023-11-23 15:08:12.364 INFO  [SpringApplicationShutdownHook] [o.s.m.s.b.SimpleBrokerMessageHandler] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7028d0c5]]
+2023-11-23 15:08:12.365 INFO  [SpringApplicationShutdownHook] [o.s.m.s.b.SimpleBrokerMessageHandler] - Stopped.
