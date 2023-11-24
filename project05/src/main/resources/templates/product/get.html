@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <th:block th:insert="~{layout/head :: head}"></th:block>
+        <link rel="stylesheet" th:href="@{/css/sub.css}">
+        <title>T셀파::중고상품</title>
+        <style>
+            .product_info dt, .product_info dd {display:inline-block;vertical-align:middle;}
+            .product_info dt {width:100px;font-family:"Open Sans",sans-serif !important;}
+            .product_info dd {width:calc(100% - 110px);}
+            .product_info dd span {font-family:"Open Sans",sans-serif !important;}
+
+            #addr, #detailAddr {font-family:"Open Sans",sans-serif !important;}
+        </style>
+    </head>
+    <body>
+
+        <th:block th:insert="~{layout/header :: header}"></th:block>
+
+        <div class="container-fluid pt-5 bg-primary hero-header mb-5">
+            <div class="container py-5">
+                <div class="align-self-center text-center ">
+                    <h1 class="text-white mb-4">상품</h1>
+                    <p class="text-white">많은 중고 상품들을 확인해 보세요.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- content -->
+        <div class="container mb-5">
+            <div class="row my-5 border-bottom border-top py-5">
+                <div class="col-6 wow fadeIn" data-wow-delay="0.5s">
+                    <div id="myCarousel" class="carousel slide" data-ride="false">
+                        <div class="carousel-inner">
+                            <!--<div th:each="photo, status : ${photosList}" class="carousel-item" th:classappend="${status.index == 0} ? 'active'">
+                                <div class="d-flex" style="width: 423.98px; height: 300px; overflow: hidden;margin:0 auto;">
+                                    <img th:src="@{/market/detailImage(saveFile=${photo.getSaveFile()}, originFile=${photo.getOriginFile()}, saveFolder=${photo.getSaveFolder()})}" class="img-fluid" style="object-fit: cover; max-width: 100%; max-height: 100%;" alt="">
+                                </div>
+                            </div>-->
+                            <div class="carousel-item active">
+                                <div class="d-flex" style="width: 423.98px; height: 300px; overflow: hidden;margin:0 auto;">
+                                    <img th:src="@{/image/freeImage.jpg}" class="img-fluid" style="object-fit: cover; max-width: 100%; max-height: 100%;" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <!--<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fas fa-chevron-left" style="color:#333;"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"><i class="fas fa-chevron-right" style="color:#333;"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>-->
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="product_info pt-4 px-1">
+                        <h4 th:if="${product.proActive == 'trade01'}" class="mb-3" th:text="${product.title}"></h4>
+                        <h4 th:if="${product.proActive == 'trade02'}" class="mb-3" th:text="${'[예약중]' + product.title}"></h4>
+                        <h4 th:if="${product.proActive == 'trade03'}" class="mb-3" th:text="${'[판매완료]' + product.title}"></h4>
+                        <h2 class="fw-bold" th:text="${product.proPrice + '원'}"></h2>
+                        <hr>
+                        <dl>
+                            <dt>상품</dt>
+                            <dd class="mb-0" th:switch="${product.proType}">
+                                <span th:case="product01">국어</span>
+                                <span th:case="product02">영어</span>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>상품상태</dt>
+                            <dd class="mb-0"><span th:text="${product.proState == 'state03' ? '최상' : (product.proState == 'state02' ? '상' : '중')}"></span></dd>
+                        </dl>
+                        <div class="row">
+                            <!--<div class="col me-2">
+                                <button class="btn btn-primary w-100 py-2" type="button">
+                                    찜하기
+                                    <i class="fa-solid fa-heart" th:if="${chkLiked == 1}" th:onclick="|toggleLike()|" style="color: red"></i>
+                                    <i class="fa-solid fa-heart" th:unless="${chkLiked == 1}" th:onclick="|toggleLike()|"></i>
+                                </button>
+                            </div>
+                            <div class="col me-2">
+                                <button class="btn btn-outline-primary w-100 py-2" type="button">신고하기
+                                    <img th:src="@{/image/siren5050.png}"  id="ck_btn" onclick="repCheck()" style="width: 20px; height: 20px;" />
+                                </button>
+                            </div>-->
+                            <div class="col"></div>
+                            <div class="col me-2" sec:authorize="isAuthenticated()" th:if="${product.proActive == 'trade01'}">
+                                <a class="btn btn-primary w-100 py-2" th:href="@{/chat/chat.do(no=${product.proNo})}">대화하기</a>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-3">
+                <h3>상품 정보</h3>
+                <hr>
+                <p th:text="${product.content}"></p>
+            </div>
+        </div>
+
+        <!--<table class="table">
+            <tbody>
+            <tr th:each="product : ${productList}">
+                <td><a th:href="@{/chat/chat.do(no=${product.getProNo()})}" th:text="${product.getTitle() + '관련 채팅'}"></a></td>
+            </tr>
+            </tbody>
+        </table>-->
+        <!-- content -->
+
+        <th:block th:insert="~{layout/footer :: footer}"></th:block>
+        <script th:src="@{/js/sub.js}"></script>
+    </body>
+</html>

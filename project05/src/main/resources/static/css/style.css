@@ -229,8 +229,12 @@ h6,
     transition: .5s;
 }
 
+.service-item {
+    box-sizing: border-box;
+}
+
 .service-item:hover {
-    background: var(--primary);
+    border:2px solid var(--primary) !important;
 }
 
 .service-item .service-icon {
@@ -242,19 +246,19 @@ h6,
     transition: .5s;
 }
 
-.service-item:hover .service-icon {
+/*.service-item:hover .service-icon {
     background: #FFFFFF;
-}
+}*/
 
 .service-item h5,
 .service-item p {
     transition: .5s;
 }
 
-.service-item:hover h5,
+/*.service-item:hover h5,
 .service-item:hover p {
     color: #FFFFFF;
-}
+}*/
 
 .service-item a.btn {
     position: relative;

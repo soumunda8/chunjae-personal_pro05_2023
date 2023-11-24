@@ -13,18 +13,10 @@
             <div class="container pt-5">
                 <div class="row g-5 pt-5">
                     <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
-                        <div class="btn btn-sm border rounded-pill text-white px-3 mb-3 animated slideInRight">AI.Tech</div>
-                        <h1 class="display-4 text-white mb-4 animated slideInRight">Artificial Intelligence for Your Business</h1>
-                        <p class="text-white mb-4 animated slideInRight">Tempor rebum no at dolore lorem clita rebum rebum ipsum
-                            rebum stet dolor sed justo kasd. Ut dolor sed magna dolor sea diam. Sit diam sit</p>
-                        <a href="" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
-                        <a href="" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a>
+                        <div class="btn btn-sm border rounded-pill text-white px-3 mb-3 animated slideInRight">증고장터</div>
+                        <h1 class="display-4 text-white mb-4 animated slideInRight">많은 상품들을<br />확인해 보세요.</h1>
+                        <a th:href="@{/product/list.do}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">상품보기</a>
                     </div>
-                    <!--
-                    <div class="col-lg-6 align-self-end text-center text-lg-end">
-                        <img class="img-fluid" src="img/hero-img.png" alt="">
-                    </div>
-                    -->
                 </div>
             </div>
         </div>
@@ -36,13 +28,11 @@
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
                     <div class="modal-header border-0">
-                        <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                        <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex align-items-center justify-content-center">
                         <div class="input-group" style="max-width: 600px;">
-                            <input type="text" class="form-control bg-transparent border-light p-3"
-                                   placeholder="Type search keyword">
+                            <input type="text" class="form-control bg-transparent border-light p-3" placeholder="Type search keyword">
                             <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
                         </div>
                     </div>
@@ -52,40 +42,34 @@
         <!-- Full Screen Search End -->
 
 
+
         <!-- About Start -->
         <div class="container-fluid py-5">
             <div class="container">
                 <div class="row g-5 align-items-center">
-                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <!--<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="about-img">
                             <img class="img-fluid" th:src="@{/image/main/about-img.jpg}">
                         </div>
-                    </div>
-                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    </div>-->
+                    <div class="col wow text-center fadeIn" data-wow-delay="0.5s">
                         <div class="btn btn-sm border rounded-pill text-primary px-3 mb-3">About Us</div>
-                        <h1 class="mb-4">We Make Your Business Smarter with Artificial Intelligence</h1>
-                        <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
-                            amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
-                            clita duo justo et tempor eirmod magna dolore erat amet</p>
-                        <p class="mb-4">Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no
-                            labore lorem sit. Sanctus clita duo justo et tempor.</p>
+                        <h1 class="mb-4">많은 중고 물품을 확인해보세요.</h1>
+                        <p class="mb-4">새로운 많은 정보를 서로와 소통하면서 이야기 해보세요.</p>
+                        <p class="mb-4">편하게 소통하실 개인 챗룸이 준비되어 있습니다.</p>
                         <div class="row g-3">
-                            <div class="col-sm-6">
-                                <h6 class="mb-3"><i class="fa fa-check text-primary me-2"></i>Award Winning</h6>
-                                <h6 class="mb-0"><i class="fa fa-check text-primary me-2"></i>Professional Staff</h6>
-                            </div>
-                            <div class="col-sm-6">
-                                <h6 class="mb-3"><i class="fa fa-check text-primary me-2"></i>24/7 Support</h6>
-                                <h6 class="mb-0"><i class="fa fa-check text-primary me-2"></i>Fair Prices</h6>
+                            <div class="col">
+                                <h6 class="mb-3"><i class="fa fa-check text-primary me-2"></i>1:1 개인 거래 톡</h6>
+                                <h6 class="mb-0"><i class="fa fa-check text-primary me-2"></i>인증된 회원의 중고 물품</h6>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center mt-4">
+                        <!--<div class="d-flex align-items-center mt-4">
                             <a class="btn btn-primary rounded-pill px-4 me-3" href="">Read More</a>
                             <a class="btn btn-outline-primary btn-square me-3" href=""><i class="fab fa-facebook-f"></i></a>
                             <a class="btn btn-outline-primary btn-square me-3" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-primary btn-square me-3" href=""><i class="fab fa-instagram"></i></a>
                             <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -94,7 +78,7 @@
 
 
         <!-- Service Start -->
-        <div class="container-fluid bg-light mt-5 py-5">
+        <!--<div class="container-fluid bg-light mt-5 py-5">
             <div class="container py-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
@@ -163,12 +147,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <!-- Service End -->
 
 
         <!-- Feature Start -->
-        <div class="container-fluid bg-primary feature pt-5">
+        <!--<div class="container-fluid bg-primary feature pt-5">
             <div class="container pt-5">
                 <div class="row g-5">
                     <div class="col-lg-6 align-self-center mb-md-5 pb-md-5 wow fadeIn" data-wow-delay="0.3s">
@@ -220,7 +204,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <!-- Feature End -->
 
 
@@ -228,22 +212,24 @@
         <div class="container-fluid bg-light py-5">
             <div class="container py-5">
                 <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <div class="btn btn-sm border rounded-pill text-primary px-3 mb-3">Case Study</div>
-                    <h1 class="mb-4">Explore Our Recent AI Case Studies</h1>
+                    <div class="btn btn-sm border rounded-pill text-primary px-3 mb-3">등록된 상품들</div>
+                    <h1 class="mb-4">중고 물품을 확인해보세요</h1>
                 </div>
                 <div class="row g-4">
-                    <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="col-lg-4 wow fadeIn" th:each="product : ${productList}" data-wow-delay="0.3s">
                         <div class="case-item position-relative overflow-hidden rounded mb-2">
                             <img class="img-fluid" th:src="@{/image/main/project-1.jpg}" alt="">
                             <a class="case-overlay text-decoration-none" href="">
-                                <small>Robotic Automation</small>
-                                <h5 class="lh-base text-white mb-3">Lorem elitr magna stet eirmod labore amet labore clita
-                                </h5>
-                                <span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>
+                                <th:block th:switch="${product.proType}">
+                                    <small th:case="product01">국어</small>
+                                    <small th:case="product02">영어</small>
+                                </th:block>
+                                <h5 class="lh-base text-white mb-3" th:text="${product.title}"></h5>
+                                <!--<span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>-->
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-4 wow fadeIn" data-wow-delay="0.5s">
+                    <!--<div class="col-lg-4 wow fadeIn" data-wow-delay="0.5s">
                         <div class="case-item position-relative overflow-hidden rounded mb-2">
                             <img class="img-fluid" th:src="@{/image/main/project-2.jpg}" alt="">
                             <a class="case-overlay text-decoration-none" href="">
@@ -264,7 +250,7 @@
                                 <span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>
                             </a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>

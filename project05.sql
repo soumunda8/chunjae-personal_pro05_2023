@@ -108,7 +108,7 @@ CREATE TABLE chat_room(
 	reg_date DATETIME DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE VIEW chatRoomView AS (SELECT r.room_id AS room_id, r.product_id AS product_id, r.reg_date AS reg_date, r.buyer_id AS buyer_id, u.user_name AS user_name, u.active AS ACTIVE FROM chat_room r LEFT JOIN user u ON r.buyer_id = u.user_id);
+CREATE VIEW chatRoomView AS (SELECT r.room_id AS room_id, r.product_id AS product_id, p.title AS productName, r.reg_date AS reg_date, r.buyer_id AS buyer_id, u.user_name AS user_name, u.active AS ACTIVE FROM chat_room r LEFT JOIN user u ON r.buyer_id = u.user_id LEFT JOIN product p ON r.product_id = p.pro_no);
 
 CREATE TABLE chat_list(
 	chat_id BIGINT PRIMARY KEY AUTO_INCREMENT,

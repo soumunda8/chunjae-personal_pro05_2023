@@ -11,6 +11,7 @@ public class ChatRoomVO {
 
     private Long roomId;
     private Integer productId;
+    private String productName = "";
     private String regDate;
     private Long buyerId;
     private String userName;

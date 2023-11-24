@@ -15,7 +15,7 @@
         <div class="container-fluid sticky-top">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-dark p-0">
-                    <a href="/" class="navbar-brand">
+                    <a th:href="@{/}" class="navbar-brand">
                         <!--<h1 class="text-white">AI<span class="text-dark">.</span>Tech</h1>-->
                         <h1><img th:src="@{/image/common/logo.png}" width="84" height="28"></h1>
                     </a>
@@ -24,12 +24,12 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto">
-                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a th:href="@{/product/list.do}" class="nav-item nav-link active">상품</a>
+                            <a th:href="@{/chat/myChatList.do}" class="nav-item nav-link">마이 챗</a>
                             <div class="nav-item dropdown board_drop_menu">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">커뮤니티</a>
                                 <div class="dropdown-menu bg-light mt-2" id="boardMenuArea"></div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                     </div>
                     <div class="navbar-end">

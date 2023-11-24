@@ -3,7 +3,7 @@
     <head>
         <th:block th:insert="~{layout/head :: head}"></th:block>
         <link rel="stylesheet" th:href="@{/css/sub.css}">
-        <title>T셀파::</title>
+        <title>T셀파::중고상품</title>
     </head>
     <body>
 
@@ -19,13 +19,56 @@
         </div>
 
         <!-- content -->
-        <table class="table">
-            <tbody>
-            <tr th:each="product : ${productList}">
-                <td><a th:href="@{/chat/myProChat.do(productId=${product.getProNo()})}" th:text="${product.getTitle() + '관련 채팅'}"></a></td>
-            </tr>
-            </tbody>
-        </table>
+        <section class="container is-fullhd py-5">
+            <h2 class="text-center mb-5">중고장터</h2>
+
+            <div class="row justify-content-md-end mb-5">
+                <div class="col-md-4 searchArea">
+                    <form th:action="@{/product/list.do}" method="get" class="field has-addons has-addons-right">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <select id="inputState" name="type" class="form-control rounded-0 border-right-0">
+                                    <option value="title" th:selected="${page.searchType eq 'title'}">제목</option>
+                                    <option value="content" th:selected="${page.searchType eq 'content'}">이름</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control" id="keyword" name="keyword" placeholder="검색어를 입력하세요" th:value="${page.searchKeyword}" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary rounded-0" type="submit">검색</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row" th:if="${productList ne ''}">
+                <div class="col-md-6 col-lg-3 wow fadeInUp" th:each="product: ${productList}" data-wow-delay="0.1s" >
+                    <a th:href="@{/product/detail.do(no=${product.proNo})}">
+                        <div class="service-item p-0 border border-1 border-light">
+                            <div class="overflow-hidden">
+                                <img class="img-fluid" th:src="@{/image/freeImage.jpg}" th:alt="${product.title + '제품 썸네일'}" />
+                                <!--<img class="img-fluid" th:src="@{/market/mainImage(saveFile = ${market.getSaveFile()}, originFile = ${market.getOriginFile()}, saveFolder = ${market.getSaveFolder()})}" alt="bookImage" style="width: 407.98px; height: 244.78px;">-->
+                            </div>
+                            <div class="p-4 text-center">
+                                <h4 th:if="${product.proActive == 'trade01'}" class="mb-3" th:text="${product.title}"></h4>
+                                <h4 th:if="${product.proActive == 'trade02'}" class="mb-3" th:text="${'[예약중]' + product.title}"></h4>
+                                <h4 th:if="${product.proActive == 'trade03'}" class="mb-3" th:text="${'[판매완료]' + product.title}"></h4>
+                                <p>가격 : <span th:text="${product.proPrice} + ' 원'"></span></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+            <div th:if="${productList eq ''}" class="text-center mt-5">
+                <h5 class="font-weight-bold" style="line-height:40vh;">등록된 상품이 없습니다.</h5>
+            </div>
+
+            <!--<div class="btn-group d-block text-lg-end mt-3" th:if="${addCheck == true}">
+                <a th:href="${'/board/add.do?no=' + boardMgn.bmNo }" class="btn btn-primary">등록하기</a>
+            </div>-->
+        </section>
         <!-- content -->
 
         <th:block th:insert="~{layout/footer :: footer}"></th:block>

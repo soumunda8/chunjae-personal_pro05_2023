@@ -11,21 +11,40 @@
 
         <div class="container-fluid pt-5 bg-primary hero-header mb-5">
             <div class="container py-5">
-                <div class="align-self-center text-center ">
-                    <h1 class="text-white mb-4">나의 채팅방</h1>
-                    <p class="text-white">상품관련 채팅방입니다</p>
+                <div class="align-self-center text-center">
+                    <h1 class="text-white mb-4" th:if="${myChat}">내 채팅방</h1>
+                    <h1 class="text-white mb-4" th:unless="${myChat}" th:text="'[ ' + ${productName} + ' ] 제품 채팅방'"></h1>
+                    <p class="text-white">채팅방을 확인해 보세요.</p>
                 </div>
             </div>
         </div>
 
         <!-- content -->
-        <table class="table">
+        <!--<table class="table">
             <tbody>
-                <tr th:each="room : ${roomList}">
+                <tr th:each="room : ${chatRoomList}">
                     <td><a th:href="@{/chat/getChat.do/{roomId}(roomId=${room.getRoomId()})}" th:text="${room.getUserName() + '님과의 채팅'}"></a></td>
                 </tr>
             </tbody>
-        </table>
+        </table>-->
+        <div class="container text-center my-5" style="min-height:75vh;">
+            <div class="row my-5">
+                <div class="col">
+                    <h2 th:if="${myChat}">나의 채팅방</h2>
+                    <h2 th:unless="${myChat}" th:text="'[ ' + ${productName} + ' ] 제품 채팅방'"></h2>
+                    <table class="table mt-5">
+                        <tbody>
+                        <tr th:each="room : ${chatRoomList}">
+                            <td class="text-start">
+                                <a th:if="${myChat}" th:href="@{/chat/getChat.do/{roomId}(roomId=${room.getRoomId()})}" th:text="${'[ ' + room.productName + ' ] ' + room.getBuyerId() + '님과의 채팅'}"></a>
+                                <a th:unless="${myChat}" th:href="@{/chat/getChat.do/{roomId}(roomId=${room.getRoomId()})}" th:text="${'[ ' + productName + ' ] ' + room.getBuyerId() + '님과의 채팅'}"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <!-- content -->
 
         <th:block th:insert="~{layout/footer :: footer}"></th:block>

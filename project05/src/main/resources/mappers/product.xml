@@ -16,7 +16,46 @@
     </resultMap>
 
     <select id="productList" resultMap="Product">
+        <![CDATA[
         SELECT * FROM product
+        ]]>
+        <where>
+            <if test="searchType != null">
+                <choose>
+                    <when test="searchType == 'title'.toString()">
+                        title LIKE concat('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'content'.toString()">
+                        content LIKE concat('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        <![CDATA[
+        order by reg_date desc limit #{postStart}, #{postCount}
+       ]]>
+    </select>
+
+    <select id="getTotalCount" resultType="Integer">
+        <![CDATA[
+        SELECT * FROM product
+        ]]>
+        <where>
+            <if test="searchType != null">
+                <choose>
+                    <when test="searchType == 'title'.toString()">
+                        title LIKE concat('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'content'.toString()">
+                        content LIKE concat('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="productListForMain" resultMap="Product">
+        SELECT * FROM product ORDER BY reg_date DESC LIMIT 3
     </select>
 
     <select id="productListByUser" resultMap="Product">
@@ -25,6 +64,10 @@
 
     <select id="productGet" resultMap="Product">
         SELECT * FROM product WHERE pro_no = #{proNo}
+    </select>
+
+    <select id="productGetAll" resultMap="Product">
+        SELECT * FROM product WHERE pro_no = #{proNo} and user_id = #{userId}
     </select>
 
 </mapper>
