@@ -158,4 +158,4 @@ CREATE TABLE trade(
 	finish_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP	-- 완료 일시
 );
 
--- 미진행 종료 --
+-- 미진행 종료
