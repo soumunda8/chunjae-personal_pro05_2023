@@ -121,7 +121,7 @@ CREATE TABLE chat_list(
 
 CREATE VIEW chatListView AS (SELECT r.chat_id AS chat_id, r.send_date AS send_date, r.message AS message, r.read_yn AS read_yn, r.room_id AS room_id, r.sender_id AS sender_id, u.user_name AS user_name FROM chat_list r LEFT JOIN user u ON r.sender_id = u.user_id);
 
--- 삭제 예정 시작
+-- 삭제 예정 시작 --
 insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'admin', '관리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 1);
 insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'kim', '김리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'kim@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 3);
 insert into user (ACTIVE, login_id, user_name, password, email, tel, addr1, addr2, postcode, birth, role_id) VALUES (1, 'shin', '신리자', '$2a$10$LEclL83IcxKcJT7/RX34j./XrDz4BudorZpdUqL0giJCChr1Fa5Xy', 'shin@tsherpa.com', '010-8524-2580', '기본주소', '상세주소', '00101', '1990-11-09', 99);
@@ -140,9 +140,9 @@ INSERT INTO category VALUES('state', '상태', 1, '', DEFAULT);
 INSERT INTO category VALUES('state01', '중', 2, 'state', DEFAULT);
 INSERT INTO category VALUES('state02', '상', 2, 'state', DEFAULT);
 INSERT INTO category VALUES('state03', '최상', 2, 'state', DEFAULT);
--- 삭제 예정 종료
+-- 삭제 예정 종료 --
 
--- 미진행 시작
+-- 미진행 시작 --
 CREATE TABLE product_likes(
 	user_id BIGINT NOT NULL,      							-- 사용자 ID
    pro_no INT NOT NULL,           							-- 상품 번호
@@ -158,4 +158,4 @@ CREATE TABLE trade(
 	finish_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP	-- 완료 일시
 );
 
--- 미진행 종료
+-- 미진행 종료 --
