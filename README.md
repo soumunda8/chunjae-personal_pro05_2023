@@ -1,4 +1,4 @@
-# [Project05] TSherpa 교사 온라인 중고 거래 서비스 - 개인
+# Project05 TSherpa 교사 온라인 중고 거래 서비스 - 개인
 
 <br /><br />
 
